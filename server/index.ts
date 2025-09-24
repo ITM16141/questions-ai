@@ -10,7 +10,7 @@ app.use(express.json());
 
 app.get("/api/problem", async (req, res) => {
     const difficulty = parseInt(req.query.difficulty as string);
-    const problem = await generateMathProblem(difficulty);
+    const problem = await generate(difficulty);
     res.json({ problem });
 });
 

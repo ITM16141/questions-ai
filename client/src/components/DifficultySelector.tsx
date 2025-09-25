@@ -22,7 +22,7 @@ const DifficultySelector: React.FC<Props> = ({ value, onChange, disabled }) => (
             onChange={(e) => onChange(e.target.value)}
             disabled={disabled}
         >
-            {["基礎レベル", "標準レベル", "応用レベル", "発展レベル"].map((level) => (
+            {levels.map((level) => (
                 <option key={level} value={level}>
                     {level}
                 </option>

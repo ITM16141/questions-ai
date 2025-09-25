@@ -35,7 +35,7 @@ function App() {
     return (
         <div style={{ padding: "2rem", textAlign: "center" }}>
             <h1>🧠 数学模試ジェネレーター</h1>
-            <DifficultySelector value={difficulty} onChange={setDifficulty} />
+            <DifficultySelector value={difficulty} onChange={setDifficulty} disabled={loading} />
             <button onClick={generateAll} disabled={loading}>
                 {loading ? "生成中…" : "問題を生成"}
             </button>

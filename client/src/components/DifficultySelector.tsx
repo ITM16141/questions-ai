@@ -3,6 +3,7 @@ import React from "react";
 type Props = {
     value: string;
     onChange: (value: string) => void;
+    disabled?: boolean;
 };
 
 const levels = [
@@ -12,15 +13,16 @@ const levels = [
     "発展レベル"
 ];
 
-const DifficultySelector: React.FC<Props> = ({ value, onChange }) => (
+const DifficultySelector: React.FC<Props> = ({ value, onChange, disabled }) => (
     <div style={{ marginBottom: "1rem" }}>
         <label htmlFor="difficulty">難易度：</label>
         <select
             id="difficulty"
             value={value}
             onChange={(e) => onChange(e.target.value)}
+            disabled={disabled}
         >
-            {levels.map((level) => (
+            {["基礎レベル", "標準レベル", "応用レベル", "発展レベル"].map((level) => (
                 <option key={level} value={level}>
                     {level}
                 </option>

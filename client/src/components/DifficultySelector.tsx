@@ -6,10 +6,10 @@ type Props = {
 };
 
 const levels = [
-    { label: "基礎レベル", value: "基礎レベル" },
-    { label: "標準レベル", value: "標準レベル" },
-    { label: "応用レベル", value: "応用レベル" },
-    { label: "発展レベル", value: "発展レベル" },
+    "基礎レベル",
+    "標準レベル",
+    "応用レベル",
+    "発展レベル"
 ];
 
 const DifficultySelector: React.FC<Props> = ({ value, onChange }) => (
@@ -21,8 +21,8 @@ const DifficultySelector: React.FC<Props> = ({ value, onChange }) => (
             onChange={(e) => onChange(e.target.value)}
         >
             {levels.map((level) => (
-                <option key={level.value} value={level.value}>
-                    {level.label}
+                <option key={level} value={level}>
+                    {level}
                 </option>
             ))}
         </select>

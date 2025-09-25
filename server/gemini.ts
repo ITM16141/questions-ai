@@ -9,12 +9,11 @@ function loadPromptTemplate(): string {
     return fs.readFileSync(filePath, "utf-8");
 }
 
-export async function generate(difficulty: string): Promise<{
+export async function generateSplit(difficulty: string): Promise<{
     problem: string;
     rest: string;
 }> {
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro" });
-
     const template = loadPromptTemplate();
     const prompt = template.replace("${difficulty}", difficulty);
 

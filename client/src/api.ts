@@ -1,17 +1,22 @@
-export async function fetchMathProblem(difficulty: string): Promise<string> {
-    try {
-        const res = await fetch(
-            `${import.meta.env.VITE_API_BASE_URL}/api/problem?difficulty=${encodeURIComponent(difficulty)}`
-        );
+const BASE = import.meta.env.VITE_API_BASE_URL;
 
-        if (!res.ok) {
-            throw new Error(`API error: ${res.status}`);
-        }
+export async function fetchProblem(difficulty: string): Promise<string> {
+    const res = await fetch(`${BASE}/api/problem?difficulty=${encodeURIComponent(difficulty)}`);
+    const data = await res.json();
+    return data.problem;
+}
 
-        const data = await res.json();
-        return data.problem;
-    } catch (err) {
-        console.error("問題の取得に失敗しました:", err);
-        return "問題の取得に失敗しました。";
-    }
+export async function fetchSolution(difficulty: string): Promise<string> {
+    const res = await fetch(`${BASE}/api/solution?difficulty=${encodeURIComponent(difficulty)}`);
+    const data = await res.json();
+    return data.solution;
+}
+
+export async function fetchPdfLinks(difficulty: string): Promise<{
+    problemPdf: string;
+    solutionPdf: string;
+}> {
+    const res = await fetch(`${BASE}/api/pdf?difficulty=${encodeURIComponent(difficulty)}`);
+    const data = await res.json();
+    return data;
 }

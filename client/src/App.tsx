@@ -9,22 +9,36 @@ function App() {
     const [solution, setSolution] = useState("");
     const [pdfLinks, setPdfLinks] = useState<{ problemPdf: string; solutionPdf: string } | null>(null);
     const [showSolution, setShowSolution] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [progressMessage, setProgressMessage] = useState("");
 
     const generateAll = async () => {
+        setLoading(true);
+        setProgressMessage("🧠 思考中…問題の構想を練っています");
+
         const prob = await fetchProblem(difficulty);
+        setProgressMessage("📚 問題構成中…誘導形式を設計しています");
+
         const sol = await fetchSolution(difficulty);
+        setProgressMessage("🔍 解答と検証を準備中…");
+
         const pdfs = await fetchPdfLinks(difficulty);
         setProblem(prob);
         setSolution(sol);
         setPdfLinks(pdfs);
         setShowSolution(false);
+
+        setProgressMessage("✅ 完了しました！");
+        setLoading(false);
     };
 
     return (
         <div style={{ padding: "2rem", textAlign: "center" }}>
             <h1>🧠 数学模試ジェネレーター</h1>
             <DifficultySelector value={difficulty} onChange={setDifficulty} />
-            <button onClick={generateAll}>問題を生成</button>
+            <button onClick={generateAll} disabled={loading}>
+                {loading ? "生成中…" : "問題を生成"}
+            </button>
 
             {problem && (
                 <>
@@ -47,6 +61,13 @@ function App() {
                     )}
                 </>
             )}
+
+            {loading && (
+                <div style={{ marginTop: "1rem", fontStyle: "italic", color: "#555" }}>
+                    {progressMessage}
+                </div>
+            )}
+
         </div>
     );
 }

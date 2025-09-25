@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import DifficultySelector from "./components/DifficultySelector";
 import { fetchMathProblem } from "./api";
 import "./styles.css";
+import MarkdownRenderer from "./components/MarkdownRenderer";
 
 function App() {
     const [difficulty, setDifficulty] = useState(1);
@@ -30,12 +31,7 @@ function App() {
                 {loading ? "生成中…" : "問題を生成"}
             </button>
             {error && <p className="error">{error}</p>}
-            {problem && (
-                <div className="problem-box">
-                    <h2>📘 問題:</h2>
-                    <pre>{problem}</pre>
-                </div>
-            )}
+            {problem && <MarkdownRenderer content={problem} />}
         </div>
     );
 }

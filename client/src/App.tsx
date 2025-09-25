@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import DifficultySelector from "./components/DifficultySelector";
 import { fetchMathProblem } from "./api";
 import ProgressBar from "./components/ProgressBar";

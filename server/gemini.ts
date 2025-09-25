@@ -4,7 +4,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
 export async function generate(difficulty: number): Promise<string> {
 
-    const model = genAI.getGenerativeModel({model: "gemini-pro"});
+    const model = genAI.getGenerativeModel({model: "gemini-2.5-pro"});
 
     const prompt = `数学の問題を1問生成してください。難易度は${difficulty}です。問題文のみを返してください。`;
 

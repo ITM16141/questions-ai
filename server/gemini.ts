@@ -24,6 +24,6 @@ export async function generate(difficulty: string): Promise<{
 
     return {
         problem: problemPart.trim(),
-        rest: `### 🔍 *模範解答*${restPart.trim()}`
+        rest: restPart.trim()
     };
 }

@@ -1,17 +1,25 @@
 import express from "express";
-import cors from "cors";
 import { generate } from "./gemini";
-import dotenv from "dotenv";
-dotenv.config();
+import { createPdf } from "./pdf";
 
 const app = express();
-app.use(cors());
-app.use(express.json());
 
-app.get("/api/problem", async (req, res) => {
-    const difficulty = parseInt(req.query.difficulty as string);
-    const problem = await generate(difficulty);
-    res.json({ problem });
+app.get("/api/problem-pdf", async (req, res) => {
+    const difficulty = Number(req.query.difficulty || 3);
+    const { problem, rest } = await generate(difficulty);
+
+    const problemPath = await createPdf(problem, "problem.pdf");
+    const restPath = await createPdf(rest, "solution.pdf");
+
+    res.json({
+        message: "PDF生成完了",
+        files: {
+            problem: problemPath,
+            solution: restPath
+        }
+    });
 });
 
-app.listen(3001, () => console.log("Server running on port 3001"));
+app.listen(3000, () => {
+    console.log("Server running on port 3000");
+});

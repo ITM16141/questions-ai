@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import path from "path";
-import { generateSplit } from "./gemini";
+import { generate } from "./gemini";
 import { createPdf } from "./pdf";
 
 dotenv.config();
@@ -12,21 +12,21 @@ app.use(cors());
 
 app.get("/api/problem", async (req, res) => {
     const difficulty = req.query.difficulty as string;
-    const { problem } = await generateSplit(difficulty);
+    const { problem } = await generate(difficulty);
     res.json({ problem });
 });
 
 app.get("/api/solution", async (req, res) => {
     const difficulty = req.query.difficulty as string;
-    const { rest } = await generateSplit(difficulty);
+    const { rest } = await generate(difficulty);
     res.json({ solution: rest });
 });
 
 app.get("/api/pdf", async (req, res) => {
     const difficulty = req.query.difficulty as string;
-    const { problem, rest } = await generateSplit(difficulty);
-    const problemPath = await createPdf(problem, "problem.pdf");
-    const solutionPath = await createPdf(rest, "solution.pdf");
+    const { problem, rest } = await generate(difficulty);
+    await createPdf(problem, "problem.pdf");
+    await createPdf(rest, "solution.pdf");
 
     res.json({
         problemPdf: "/download/problem.pdf",

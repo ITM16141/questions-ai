@@ -17,6 +17,5 @@ export async function fetchPdfLinks(difficulty: string): Promise<{
     solutionPdf: string;
 }> {
     const res = await fetch(`${BASE}/api/pdf?difficulty=${encodeURIComponent(difficulty)}`);
-    const data = await res.json();
-    return data;
+    return await res.json();
 }

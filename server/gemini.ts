@@ -9,7 +9,7 @@ function loadPromptTemplate(): string {
     return fs.readFileSync(filePath, "utf-8");
 }
 
-export async function generateSplit(difficulty: string): Promise<{
+export async function generate(difficulty: string): Promise<{
     problem: string;
     rest: string;
 }> {

@@ -1,7 +1,7 @@
-export async function fetchMathProblem(difficulty: number): Promise<string> {
+export async function fetchMathProblem(difficulty: string): Promise<string> {
     try {
         const res = await fetch(
-            `${import.meta.env.VITE_API_BASE_URL}/api/problem?difficulty=${difficulty}`
+            `${import.meta.env.VITE_API_BASE_URL}/api/problem?difficulty=${encodeURIComponent(difficulty)}`
         );
 
         if (!res.ok) {

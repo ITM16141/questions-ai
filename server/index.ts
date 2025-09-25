@@ -5,7 +5,7 @@ import { createPdf } from "./pdf";
 const app = express();
 
 app.get("/api/problem-pdf", async (req, res) => {
-    const difficulty = Number(req.query.difficulty || 3);
+    const difficulty = req.query.difficulty as string;
     const { problem, rest } = await generate(difficulty);
 
     const problemPath = await createPdf(problem, "problem.pdf");

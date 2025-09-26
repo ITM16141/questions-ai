@@ -20,7 +20,9 @@ type RawHistoryRow = {
 };
 
 app.use(cors({
-    origin: "https://questions-ai-two.vercel.app"
+    origin: "https://questions-ai-two.vercel.app",
+    methods: ["GET", "POST", "PATCH"],
+    credentials: true
 }));
 
 app.get("/api/session", handleSession);

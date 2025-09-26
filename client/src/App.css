@@ -66,3 +66,10 @@ pre {
     margin-right: 0.5rem;
 }
 
+.tag-search {
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    width: 100%;
+    max-width: 400px;
+    font-size: 1rem;
+}

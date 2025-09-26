@@ -24,6 +24,7 @@ function App() {
     const [history, setHistory] = useState<HistoryEntry[]>([]);
     const [loading, setLoading] = useState(false);
     const [tagInputs, setTagInputs] = useState<Record<number, string>>({});
+    const [searchTag, setSearchTag] = useState("");
     const [showSolution, setShowSolution] = useState(false);
     const [progressMessage, setProgressMessage] = useState("");
 
@@ -63,8 +64,14 @@ function App() {
         setHistory(updated);
     };
 
+    const filteredHistory = searchTag.trim()
+        ? history.filter(entry =>
+            entry.tags.some(tag => tag.toLowerCase().includes(searchTag.toLowerCase()))
+        )
+        : history;
+
     return (
-        <div style={{ padding: "2rem", maxWidth: "800px", margin: "0 auto" }}>
+        <div>
             <h1>🧠 数学問題ジェネレーター</h1>
 
             <DifficultySelector value={difficulty} onChange={setDifficulty} disabled={loading} />
@@ -97,12 +104,20 @@ function App() {
                 </>
             )}
 
-            <hr style={{ margin: "2rem 0" }} />
             <h2>📚 履歴</h2>
-            {history.map((entry, idx) => (
+
+            <input
+                type="text"
+                placeholder="タグで検索（例：微分）"
+                value={searchTag}
+                onChange={e => setSearchTag(e.target.value)}
+                className="tag-search"
+            />
+
+            {filteredHistory.map((entry, idx) => (
                 <div key={idx} className="history-card">
                     <div><strong>難易度：</strong>{entry.difficulty}</div>
-                    <div><strong>出題範囲：</strong>{entry.includeMathThree ? "数学I・II・III・A・B・C" : "数学I・II・A・B・C"}</div>
+                    <div><strong>出題範囲：</strong>{entry.includeMathThree ? "数学I〜III" : "数学I〜II"}</div>
                     <div><strong>日時：</strong>{new Date(entry.timestamp).toLocaleString()}</div>
 
                     {entry.tags.length > 0 && (

@@ -1,6 +1,7 @@
 import {ChatSession, GoogleGenerativeAI} from "@google/generative-ai";
 import path from "path";
 import fs from "fs";
+import {loadHistory, saveHistory} from "./storage";
 
 type HistoryEntry = {
     userId: string;
@@ -12,7 +13,7 @@ type HistoryEntry = {
     tags: string[];
 };
 
-export const history: HistoryEntry[] = [];
+export const history: HistoryEntry[] = loadHistory();
 
 const sessions = new Map<string, ChatSession>();
 
@@ -66,7 +67,7 @@ export async function handleSession(req: { query: { userId: any; difficulty: any
     const problem = problemPart.trim();
     const solution = restPart.trim();
 
-    history.push({
+    const entry: HistoryEntry = {
         userId: uid,
         difficulty: String(difficulty),
         includeMathThree: includeMathThree === "true",
@@ -74,7 +75,10 @@ export async function handleSession(req: { query: { userId: any; difficulty: any
         solution,
         timestamp: Date.now(),
         tags: []
-    });
+    };
+
+    history.push(entry);
+    saveHistory(history);
 
     res.json({ problem, solution });
 }

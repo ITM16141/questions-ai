@@ -145,7 +145,7 @@ function App() {
             <ul>
                 {sortedHistory.map((entry) => (
                     <li key={entry.id} style={{ marginBottom: "1rem" }}>
-                        <strong>{new Date(entry.timestamp).toLocaleString()}</strong>（{entry.difficulty} / {entry.includeMathThree ? "数学III含む" : "含まない"}）<br />
+                        <strong>{new Date(entry.timestamp).toLocaleString()}</strong>（{entry.difficulty} / {entry.includeMathThree ? "数学IIIを含む" : "数学IIIを除く"}）<br />
                         タグ: {entry.tags.join(", ") || "なし"}<br />
                         <a href={entry.problemPdf} download>📥 問題PDF</a> ／ <a href={entry.solutionPdf} download>📥 解答PDF</a><br />
                         <button onClick={() => deleteHistory(userId, entry.id).then(() => fetchHistory(userId).then(setHistory))}>🗑️ 削除</button>

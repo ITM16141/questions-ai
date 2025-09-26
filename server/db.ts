@@ -1,7 +1,13 @@
 import Database from "better-sqlite3";
 import path from "path";
+import fs from "fs";
 
-const db = new Database(path.join(process.cwd(), "data", "history.db"));
+const dataDir = path.join(process.cwd(), "data");
+if (!fs.existsSync(dataDir)) {
+    fs.mkdirSync(dataDir);
+}
+
+const db = new Database(path.join(dataDir, "history.db"));
 
 db.exec(`
   CREATE TABLE IF NOT EXISTS history (

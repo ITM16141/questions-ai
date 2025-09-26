@@ -54,7 +54,7 @@ function App() {
         setProgressMessage("📚 問題構成中…誘導形式を設計しています");
 
         const sol = await fetchSolution(userId, difficulty, includeMathThree);
-        setProgressMessage("🔍 解答と検証を準備中…");
+        setProgressMessage("🔍 解答と検証を準備しています");
 
         const pdfs = await fetchPdfLinks(userId, difficulty, includeMathThree);
 

@@ -1,7 +1,6 @@
 import express from "express";
 import cors from "cors";
 import { handleSession } from "./session";
-import {saveHistory} from "./storage";
 import db from "./db";
 
 const app = express();

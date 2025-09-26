@@ -11,6 +11,9 @@ export function createMockExamPdf(content: string, filename: string, title: stri
         const stream = fs.createWriteStream(filePath);
         doc.pipe(stream);
 
+        const fontPath = path.join(process.cwd(), "fonts", "NotoSansJP-Regular.ttf");
+        doc.font(fontPath);
+
         doc.fontSize(20).text(title, { align: "center" });
         doc.moveDown();
         doc.fontSize(12).text(`作成日：${new Date().toLocaleDateString()}`, { align: "right" });

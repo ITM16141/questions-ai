@@ -9,17 +9,20 @@ function loadPromptTemplate(): string {
     return fs.readFileSync(filePath, "utf-8");
 }
 
-export async function generate(difficulty: string): Promise<{
+export async function generate(difficulty: string, includeMathIII: boolean): Promise<{
     problem: string;
     rest: string;
 }> {
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro" });
     const template = loadPromptTemplate();
-    const prompt = template.replace("${difficulty}", difficulty);
+
+    const range = includeMathIII ? "数学I・II・III・A・B・C" : "数学I・II・A・B・C";
+    const prompt = template
+        .replace("${difficulty}", difficulty)
+        .replace("${range}", range);
 
     const result = await model.generateContent(prompt);
     const fullText = result.response.text();
-
     const [problemPart, restPart] = fullText.split("<division>");
 
     return {

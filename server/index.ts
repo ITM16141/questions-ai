@@ -12,27 +12,30 @@ app.use(cors());
 
 app.get("/api/problem", async (req, res) => {
     const difficulty = req.query.difficulty as string;
-    const { problem } = await generate(difficulty);
+    const includeMathThree = req.query.includeMathThree === "true";
+    const { problem } = await generate(difficulty, includeMathThree);
     res.json({ problem });
 });
 
 app.get("/api/solution", async (req, res) => {
     const difficulty = req.query.difficulty as string;
-    const { rest } = await generate(difficulty);
+    const includeMathThree = req.query.includeMathThree === "true";
+    const { rest } = await generate(difficulty, includeMathThree);
     res.json({ solution: rest });
 });
 
 app.get("/api/pdf", async (req, res) => {
     const difficulty = req.query.difficulty as string;
-    const { problem, rest } = await generate(difficulty);
-    await createPdf(problem, "problem.pdf");
-    await createPdf(rest, "solution.pdf");
-
+    const includeMathThree = req.query.includeMathThree === "true";
+    const { problem, rest } = await generate(difficulty, includeMathThree);
+    const problemPath = await createPdf(problem, "problem.pdf");
+    const solutionPath = await createPdf(rest, "solution.pdf");
     res.json({
-        problemPdf: "/download/problem.pdf",
-        solutionPdf: "/download/solution.pdf"
+        problemPdf: `/download/${path.basename(problemPath)}`,
+        solutionPdf: `/download/${path.basename(solutionPath)}`
     });
 });
+
 
 app.use("/download", express.static(path.join(__dirname)));
 

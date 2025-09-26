@@ -11,8 +11,8 @@ function RangeSelector({ value, onChange, disabled }: Props) {
         <div style={{ marginBottom: "1rem" }}>
             <label>出題範囲：</label>
             <select value={value ? "true" : "false"} onChange={(e) => onChange(e.target.value === "true")} disabled={disabled}>
-                <option value="false">数学I・II・A・B・C</option>
-                <option value="true">数学I・II・III・A・B・C</option>
+                <option value="false">数学IIIを除く</option>
+                <option value="true">数学IIIを含む</option>
             </select>
         </div>
     );

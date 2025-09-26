@@ -65,7 +65,7 @@ app.get("/api/gallery", (req, res) => {
             ...r,
             includeMathThree: !!r.includeMathThree,
             pinned: !!r.pinned,
-            public: !!r.public,
+            public: r.public,
             tags: JSON.parse(r.tags)
         }
     });

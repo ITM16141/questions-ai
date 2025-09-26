@@ -47,10 +47,14 @@ function App() {
 
     const generateAll = async () => {
         setLoading(true);
-        setProgressMessage("🧠 思考中…");
+        setProgressMessage("🧠 思考中…問題の構想を練っています");
 
         const prob = await fetchProblem(userId, difficulty, includeMathThree);
+        setProgressMessage("📚 問題構成中…誘導形式を設計しています");
+
         const sol = await fetchSolution(userId, difficulty, includeMathThree);
+        setProgressMessage("🔍 解答と検証を準備中…");
+
         const pdfs = await fetchPdfLinks(userId, difficulty, includeMathThree);
 
         setProblem(prob);

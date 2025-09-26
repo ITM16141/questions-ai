@@ -23,7 +23,7 @@ export async function generate(difficulty: string): Promise<{
     const [problemPart, restPart] = fullText.split("<division>");
 
     return {
-        problem: problemPart,
-        rest: restPart
+        problem: problemPart.trim(),
+        rest: restPart.trim()
     };
 }

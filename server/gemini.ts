@@ -9,14 +9,14 @@ function loadPromptTemplate(): string {
     return fs.readFileSync(filePath, "utf-8");
 }
 
-export async function generate(difficulty: string, includeMathIII: boolean): Promise<{
+export async function generate(difficulty: string, includeMathThree: boolean): Promise<{
     problem: string;
     rest: string;
 }> {
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro" });
     const template = loadPromptTemplate();
 
-    const range = includeMathIII ? "数学I・II・III・A・B・C" : "数学I・II・A・B・C";
+    const range = includeMathThree ? "数学I・II・III・A・B・C" : "数学I・II・A・B・C";
     const prompt = template
         .replace("${difficulty}", difficulty)
         .replace("${range}", range);

@@ -14,6 +14,5 @@ export async function fetchSolution(difficulty: string, includeMathIII: boolean)
 
 export async function fetchPdfLinks(difficulty: string, includeMathIII: boolean): Promise<{ problemPdf: string; solutionPdf: string }> {
     const res = await fetch(`${BASE}/api/pdf?difficulty=${encodeURIComponent(difficulty)}&includeMathIII=${includeMathIII}`);
-    const data = await res.json();
-    return data;
+    return await res.json();
 }

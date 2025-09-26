@@ -1,4 +1,4 @@
-const BASE = import.meta.env.VITE_API_BASE_URL;
+export const BASE = import.meta.env.VITE_API_BASE_URL;
 
 
 export async function createSession(userId: string): Promise<void> {

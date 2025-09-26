@@ -4,6 +4,7 @@ import DifficultySelector from "./components/DifficultySelector";
 import RangeSelector from "./components/RangeSelector";
 import MarkdownRenderer from "./components/MarkdownRenderer";
 import {
+    BASE,
     createSession,
     fetchProblem,
     fetchSolution,
@@ -11,7 +12,7 @@ import {
     fetchHistory,
     deleteHistory,
     updateTags,
-    searchHistory
+    searchHistory,
 } from "./api";
 
 function App() {
@@ -106,7 +107,7 @@ function App() {
             {problem && (
                 <>
                     <MarkdownRenderer content={problem} />
-                    {pdfLinks && <a href={pdfLinks.problemPdf} download>📥 問題をダウンロード</a>}
+                    {pdfLinks && <a href={BASE + pdfLinks.problemPdf} download>📥 問題をダウンロード</a>}
 
                     <div style={{ marginTop: "1rem" }}>
                         <button onClick={() => setShowSolution(!showSolution)}>
@@ -117,7 +118,7 @@ function App() {
                     {showSolution && (
                         <>
                             <MarkdownRenderer content={solution} />
-                            {pdfLinks && <a href={pdfLinks.solutionPdf} download>📥 解答・検証をダウンロード</a>}
+                            {pdfLinks && <a href={BASE + pdfLinks.solutionPdf} download>📥 解答・検証をダウンロード</a>}
                         </>
                     )}
                 </>
@@ -150,7 +151,7 @@ function App() {
                     <li key={entry.id} style={{ marginBottom: "1rem" }}>
                         <strong>{new Date(entry.timestamp).toLocaleString()}</strong>（{entry.difficulty} / {entry.includeMathThree ? "数学IIIを含む" : "数学IIIを除く"}）<br />
                         タグ: {entry.tags.join(", ") || "なし"}<br />
-                        <a href={entry.problemPdf} download>📥 問題PDF</a> ／ <a href={entry.solutionPdf} download>📥 解答PDF</a><br />
+                        <a href= {BASE + entry.problemPdf} download>📥 問題PDF</a> ／ <a href={BASE + entry.solutionPdf} download>📥 解答PDF</a><br />
                         <button onClick={() => deleteHistory(userId, entry.id).then(() => fetchHistory(userId).then(setHistory))}>🗑️ 削除</button>
                         <input
                             type="text"

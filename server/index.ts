@@ -108,7 +108,7 @@ app.get("/api/history/search", (req, res) => {
     res.json({ history: results });
 });
 
-app.use("/download", express.static(path.join(__dirname)));
+app.use("/download", express.static(path.join(process.cwd(), "public")));
 
 app.listen(3000, () => {
     console.log("Server running on port 3000");

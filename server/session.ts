@@ -10,7 +10,7 @@ const sessions = new Map<string, {
 }>();
 
 function loadPrompt(): string {
-    const filePath = path.join(__dirname, "prompts", "problem-generator.md");
+    const filePath = path.join(process.cwd(), "prompts", "problem-generator.md");
     return fs.readFileSync(filePath, "utf-8");
 }
 

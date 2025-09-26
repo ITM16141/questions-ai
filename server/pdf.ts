@@ -4,7 +4,9 @@ import path from "path";
 
 export function createMockExamPdf(content: string, filename: string, title: string): Promise<string> {
     return new Promise((resolve) => {
-        const filePath = path.join(__dirname, filename);
+        const publicDir = path.join(process.cwd(), "public");
+        if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir);
+        const filePath = path.join(publicDir, filename);
         const doc = new PDFDocument({ margin: 50 });
         const stream = fs.createWriteStream(filePath);
         doc.pipe(stream);

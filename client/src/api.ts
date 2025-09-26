@@ -18,8 +18,7 @@ export async function fetchSolution(userId: string, difficulty: string, includeM
 
 export async function fetchPdfLinks(userId: string, difficulty: string, includeMathThree: boolean): Promise<{ problemPdf: string; solutionPdf: string }> {
     const res = await fetch(`${BASE}/api/pdf?userId=${userId}&difficulty=${encodeURIComponent(difficulty)}&includeMathThree=${includeMathThree}`);
-    const data = await res.json();
-    return data;
+    return await res.json();
 }
 
 export async function fetchHistory(userId: string): Promise<any[]> {

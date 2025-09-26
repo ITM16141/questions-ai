@@ -87,7 +87,7 @@ function App() {
 
     return (
         <div style={{ padding: "2rem", maxWidth: "800px", margin: "0 auto" }}>
-            <h1>🧠 数学模試ジェネレーター</h1>
+            <h1>🧠 数学問題ジェネレーター</h1>
 
             <DifficultySelector value={difficulty} onChange={setDifficulty} disabled={loading} />
             <RangeSelector value={includeMathThree} onChange={setIncludeMathThree} disabled={loading} />
@@ -100,7 +100,6 @@ function App() {
 
             {problem && (
                 <>
-                    <h2>📝 問題</h2>
                     <MarkdownRenderer content={problem} />
                     {pdfLinks && <a href={pdfLinks.problemPdf} download>📥 問題をダウンロード</a>}
 
@@ -112,7 +111,6 @@ function App() {
 
                     {showSolution && (
                         <>
-                            <h2>🔍 解答・検証</h2>
                             <MarkdownRenderer content={solution} />
                             {pdfLinks && <a href={pdfLinks.solutionPdf} download>📥 解答・検証をダウンロード</a>}
                         </>

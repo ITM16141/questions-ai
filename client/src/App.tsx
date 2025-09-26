@@ -78,7 +78,7 @@ function App() {
         setHistory(updated);
     };
 
-    const sortedHistory = [...history].sort((a, b) => {
+    const sortedHistory = [...filteredHistory].sort((a, b) => {
         if (a.pinned && !b.pinned) return -1;
         if (!a.pinned && b.pinned) return 1;
         return b.timestamp - a.timestamp;
@@ -128,7 +128,7 @@ function App() {
                 className="tag-search"
             />
 
-            {filteredHistory.map((entry, idx) => (
+            {sortedHistory.map((entry, idx) => (
                 <div key={idx} className="history-card">
                     <div><strong>難易度：</strong>{entry.difficulty}</div>
                     <div><strong>出題範囲：</strong>{entry.includeMathThree ? "数学I〜III" : "数学I〜II"}</div>

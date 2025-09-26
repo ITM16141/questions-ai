@@ -1,22 +1,9 @@
+import { Request, Response } from "express";
 import {ChatSession, GoogleGenerativeAI} from "@google/generative-ai";
 import path from "path";
 import fs from "fs";
-import {loadHistory, saveHistory} from "./storage";
 import { randomUUID } from "crypto";
-
-type HistoryEntry = {
-    id: string;
-    userId: string;
-    difficulty: string;
-    includeMathThree: boolean;
-    problem: string;
-    solution: string;
-    timestamp: number;
-    tags: string[];
-    pinned: boolean;
-};
-
-export const history: HistoryEntry[] = loadHistory();
+import db from "./db";
 
 const sessions = new Map<string, ChatSession>();
 
@@ -49,7 +36,7 @@ export function createSessionForUser(userId: string): ChatSession {
     return chat;
 }
 
-export async function handleSession(req: { query: { userId: any; difficulty: any; includeMathThree: any; }; }, res: { json: (arg0: { problem: string; solution: string; }) => void; }) {
+export async function handleSession(req: Request, res: Response) {
     const { userId, difficulty, includeMathThree } = req.query;
     const uid = String(userId);
 
@@ -70,21 +57,13 @@ export async function handleSession(req: { query: { userId: any; difficulty: any
     const problem = problemPart.trim();
     const solution = restPart.trim();
 
-    const entry: HistoryEntry = {
-        id: randomUUID(),
-        userId: uid,
-        difficulty: String(difficulty),
-        includeMathThree: includeMathThree === "true",
-        problem,
-        solution,
-        timestamp: Date.now(),
-        tags: [],
-        pinned: false
-    };
+    const id = randomUUID();
+    const timestamp = Date.now();
 
-
-    history.push(entry);
-    saveHistory(history);
+    db.prepare(`
+        INSERT INTO history (id, userId, difficulty, includeMathThree, problem, solution, timestamp, tags, pinned)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `).run(id, uid, difficulty, includeMathThree === "true" ? 1 : 0, problem, solution, timestamp, JSON.stringify([]), 0);
 
     res.json({ problem, solution });
 }

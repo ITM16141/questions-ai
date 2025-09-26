@@ -33,7 +33,7 @@ function App() {
     const generate = async () => {
         setLoading(true);
 
-        setProgressMessage("📚 パッケージ構成中……問題および解答を生成しています");
+        setProgressMessage(" パッケージ構成中……問題および解答を生成しています");
         const { problem, solution } = await fetchProblem(userId, difficulty, includeMathThree);
 
         setProblem(problem);

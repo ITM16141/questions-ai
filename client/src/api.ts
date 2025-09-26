@@ -1,4 +1,5 @@
-const BASE = "http://localhost:3000";
+const BASE = import.meta.env.VITE_API_BASE_URL;
+
 
 export async function createSession(userId: string): Promise<void> {
     await fetch(`${BASE}/api/session?userId=${userId}`);

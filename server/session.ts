@@ -1,4 +1,6 @@
 import {ChatSession, GoogleGenerativeAI} from "@google/generative-ai";
+import path from "path";
+import fs from "fs";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
@@ -7,6 +9,11 @@ const sessions = new Map<string, {
     createdAt: number;
 }>();
 
+function loadPrompt(): string {
+    const filePath = path.join(__dirname, "prompts", "problem-generator.md");
+    return fs.readFileSync(filePath, "utf-8");
+}
+
 export function createSessionForUser(userId: string): void {
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro" });
 
@@ -14,7 +21,7 @@ export function createSessionForUser(userId: string): void {
         history: [
             {
                 role: "user",
-                parts: [{ text: "あなたは大学入試模試の問題作成者です。以下の形式で問題を生成してください…" }]
+                parts: [{ text: loadPrompt() }]
             },
             {
                 role: "model",

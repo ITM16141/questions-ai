@@ -29,13 +29,16 @@
     border-radius: 8px;
     background: #f9f9f9;
 }
+
 pre {
     white-space: pre-wrap;
     word-break: break-word;
 }
+
 .tags {
     margin-top: 0.5rem;
 }
+
 .tag {
     display: inline-block;
     background: #e0f0ff;
@@ -45,3 +48,21 @@ pre {
     border-radius: 4px;
     font-size: 0.9rem;
 }
+
+.tag-remove {
+    margin-left: 0.3rem;
+    background: none;
+    border: none;
+    color: red;
+    cursor: pointer;
+}
+
+.tag-editor {
+    margin-top: 0.5rem;
+}
+
+.tag-editor input {
+    padding: 0.3rem;
+    margin-right: 0.5rem;
+}
+

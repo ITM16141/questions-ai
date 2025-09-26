@@ -11,11 +11,26 @@ app.use(cors({
 
 app.get("/api/session", handleSession);
 
-// 履歴取得API
 app.get("/api/history", (req, res) => {
     const { userId } = req.query;
     const userHistory = history.filter(h => h.userId === userId);
     res.json(userHistory);
+});
+
+app.patch("/api/history/:index/tags", (req, res) => {
+    const index = Number(req.params.index);
+    const { tags } = req.body;
+
+    if (!Array.isArray(tags)) {
+        return res.status(400).json({ error: "tags must be an array" });
+    }
+
+    if (index < 0 || index >= history.length) {
+        return res.status(404).json({ error: "history entry not found" });
+    }
+
+    history[index].tags = tags;
+    res.json({ success: true, tags });
 });
 
 const PORT = process.env.PORT || 3000;

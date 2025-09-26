@@ -1,90 +1,66 @@
 import "./App.css";
 import React, { useEffect, useState } from "react";
+import {fetchProblem, fetchHistory, updateTags} from "./api";
 import DifficultySelector from "./components/DifficultySelector";
 import RangeSelector from "./components/RangeSelector";
 import MarkdownRenderer from "./components/MarkdownRenderer";
-import {
-    BASE,
-    createSession,
-    fetchProblem,
-    fetchSolution,
-    fetchPdfLinks,
-    fetchHistory,
-    deleteHistory,
-    updateTags,
-    searchHistory,
-} from "./api";
+
+type HistoryEntry = {
+    userId: string;
+    difficulty: string;
+    includeMathThree: boolean;
+    problem: string;
+    solution: string;
+    timestamp: number;
+    tags: string[];
+};
 
 function App() {
+    const [userId] = useState("your-user-id");
     const [difficulty, setDifficulty] = useState("標準レベル");
-    const [includeMathThree, setIncludeMathThree] = useState(true);
-    const [userId, setUserId] = useState("");
+    const [includeMathThree, setIncludeMathThree] = useState(false);
     const [problem, setProblem] = useState("");
     const [solution, setSolution] = useState("");
-    const [pdfLinks, setPdfLinks] = useState<{ problemPdf: string; solutionPdf: string } | null>(null);
-    const [showSolution, setShowSolution] = useState(false);
+    const [history, setHistory] = useState<HistoryEntry[]>([]);
     const [loading, setLoading] = useState(false);
+    const [tagInputs, setTagInputs] = useState<Record<number, string>>({});
+    const [showSolution, setShowSolution] = useState(false);
     const [progressMessage, setProgressMessage] = useState("");
-    const [history, setHistory] = useState<any[]>([]);
-    const [sortBy, setSortBy] = useState<"timestamp" | "difficulty" | "tag">("timestamp");
-    const [searchKeyword, setSearchKeyword] = useState("");
 
-    useEffect(() => {
-        const storedId = localStorage.getItem("userId");
-        if (storedId) {
-            setUserId(storedId);
-        } else {
-            const newId = crypto.randomUUID();
-            localStorage.setItem("userId", newId);
-            setUserId(newId);
-        }
-    }, []);
-
-    useEffect(() => {
-        if (userId) {
-            createSession(userId);
-            fetchHistory(userId).then(setHistory);
-        }
-    }, [userId]);
-
-    const generateAll = async () => {
+    const generate = async () => {
         setLoading(true);
-        setProgressMessage("🧠 思考中…問題の構想を練っています");
 
-        const prob = await fetchProblem(userId, difficulty, includeMathThree);
-        setProgressMessage("📚 問題構成中…誘導形式を設計しています");
+        setProgressMessage("📚 パッケージ構成中……問題および解答を生成しています");
+        const { problem, solution } = await fetchProblem(userId, difficulty, includeMathThree);
 
-        const sol = await fetchSolution(userId, difficulty, includeMathThree);
-        setProgressMessage("🔍 解答と検証を準備しています");
-
-        const pdfs = await fetchPdfLinks(userId, difficulty, includeMathThree);
-
-        setProblem(prob);
-        setSolution(sol);
-        setPdfLinks(pdfs);
-        setShowSolution(false);
+        setProblem(problem);
+        setSolution(solution);
         setProgressMessage("✅ 完了しました！");
         setLoading(false);
 
-        fetchHistory(userId).then(setHistory);
+        const updated = await fetchHistory(userId);
+        setHistory(updated);
     };
 
-    const sortedHistory = [...history].sort((a, b) => {
-        switch (sortBy) {
-            case "timestamp":
-                return b.timestamp - a.timestamp;
-            case "difficulty":
-                return a.difficulty.localeCompare(b.difficulty);
-            case "tag":
-                return (a.tags[0] || "").localeCompare(b.tags[0] || "");
-            default:
-                return 0;
-        }
-    });
+    useEffect(() => {
+        fetchHistory(userId).then(setHistory);
+    }, []);
 
-    const handleSearch = async () => {
-        const results = await searchHistory(userId, searchKeyword);
-        setHistory(results);
+    const handleAddTag = async (index: number) => {
+        const newTag = tagInputs[index]?.trim();
+        if (!newTag) return;
+        const updatedTags = [...history[index].tags, newTag];
+        await updateTags(index, updatedTags);
+        const updated = await fetchHistory(userId);
+        setHistory(updated);
+        setTagInputs({ ...tagInputs, [index]: "" });
+    };
+
+    const handleRemoveTag = async (index: number, tagToRemove: string) => {
+        const updatedTags = history[index].tags.filter(tag => tag !== tagToRemove);
+        await updateTags(index, updatedTags);
+        const updated = await fetchHistory(userId);
+        setHistory(updated);
     };
 
     return (
@@ -94,7 +70,7 @@ function App() {
             <DifficultySelector value={difficulty} onChange={setDifficulty} disabled={loading} />
             <RangeSelector value={includeMathThree} onChange={setIncludeMathThree} disabled={loading} />
 
-            <button onClick={generateAll} disabled={loading}>
+            <button onClick={generate} disabled={loading}>
                 {loading ? "生成中…" : "問題を生成"}
             </button>
 
@@ -107,8 +83,6 @@ function App() {
             {problem && (
                 <>
                     <MarkdownRenderer content={problem} />
-                    {pdfLinks && <a href={BASE + pdfLinks.problemPdf} download>📥 問題をダウンロード</a>}
-
                     <div style={{ marginTop: "1rem" }}>
                         <button onClick={() => setShowSolution(!showSolution)}>
                             {showSolution ? "解答・検証を隠す" : "解答・検証を見る"}
@@ -118,7 +92,6 @@ function App() {
                     {showSolution && (
                         <>
                             <MarkdownRenderer content={solution} />
-                            {pdfLinks && <a href={BASE + pdfLinks.solutionPdf} download>📥 解答・検証をダウンロード</a>}
                         </>
                     )}
                 </>
@@ -126,41 +99,44 @@ function App() {
 
             <hr style={{ margin: "2rem 0" }} />
             <h2>📚 履歴</h2>
+            {history.map((entry, idx) => (
+                <div key={idx} className="history-card">
+                    <div><strong>難易度：</strong>{entry.difficulty}</div>
+                    <div><strong>出題範囲：</strong>{entry.includeMathThree ? "数学I・II・III・A・B・C" : "数学I・II・A・B・C"}</div>
+                    <div><strong>日時：</strong>{new Date(entry.timestamp).toLocaleString()}</div>
 
-            <div>
-                <label>並び替え：</label>
-                <select value={sortBy} onChange={(e) => setSortBy(e.target.value as any)}>
-                    <option value="timestamp">🕒 新着順</option>
-                    <option value="difficulty">📘 難易度順</option>
-                    <option value="tag">🏷️ タグ順</option>
-                </select>
-            </div>
+                    {entry.tags.length > 0 && (
+                        <div className="tags">
+                            <strong>タグ：</strong>
+                            {entry.tags.map((tag, i) => (
+                                <span key={i} className="tag">
+                                    {tag}
+                                    <button className="tag-remove" onClick={() => handleRemoveTag(idx, tag)}>❌</button>
+                                </span>
+                            ))}
+                        </div>
+                    )}
 
-            <div style={{ marginTop: "1rem" }}>
-                <input
-                    type="text"
-                    placeholder="キーワード検索"
-                    value={searchKeyword}
-                    onChange={(e) => setSearchKeyword(e.target.value)}
-                />
-                <button onClick={handleSearch}>🔍 検索</button>
-            </div>
-
-            <ul>
-                {sortedHistory.map((entry) => (
-                    <li key={entry.id} style={{ marginBottom: "1rem" }}>
-                        <strong>{new Date(entry.timestamp).toLocaleString()}</strong>（{entry.difficulty} / {entry.includeMathThree ? "数学IIIを含む" : "数学IIIを除く"}）<br />
-                        タグ: {entry.tags.join(", ") || "なし"}<br />
-                        <a href= {BASE + entry.problemPdf} download>📥 問題PDF</a> ／ <a href={BASE + entry.solutionPdf} download>📥 解答PDF</a><br />
-                        <button onClick={() => deleteHistory(userId, entry.id).then(() => fetchHistory(userId).then(setHistory))}>🗑️ 削除</button>
+                    <div className="tag-editor">
                         <input
                             type="text"
-                            placeholder="タグ（カンマ区切り）"
-                            onBlur={(e) => updateTags(userId, entry.id, e.target.value.split(",").map(t => t.trim())).then(() => fetchHistory(userId).then(setHistory))}
+                            value={tagInputs[idx] || ""}
+                            onChange={e => setTagInputs({ ...tagInputs, [idx]: e.target.value })}
+                            placeholder="タグを追加"
                         />
-                    </li>
-                ))}
-            </ul>
+                        <button onClick={() => handleAddTag(idx)}>追加</button>
+                    </div>
+
+                    <details>
+                        <summary>📘 問題を見る</summary>
+                        <pre>{entry.problem}</pre>
+                    </details>
+                    <details>
+                        <summary>🧠 解答を見る</summary>
+                        <pre>{entry.solution}</pre>
+                    </details>
+                </div>
+            ))}
         </div>
     );
 }

@@ -2,22 +2,29 @@ import {ChatSession, GoogleGenerativeAI} from "@google/generative-ai";
 import path from "path";
 import fs from "fs";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+type HistoryEntry = {
+    userId: string;
+    difficulty: string;
+    includeMathThree: boolean;
+    problem: string;
+    solution: string;
+    timestamp: number;
+    tags: string[];
+};
 
-const sessions = new Map<string, {
-    chat: ChatSession;
-    createdAt: number;
-}>();
+export const history: HistoryEntry[] = [];
+
+const sessions = new Map<string, ChatSession>();
+
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
 function loadPrompt(): string {
     const filePath = path.join(process.cwd(), "prompts", "problem-generator.md");
     return fs.readFileSync(filePath, "utf-8");
 }
 
-export function createSessionForUser(userId: string): void {
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro" });
-
-    const chat: ChatSession = model.startChat({
+export function createSessionForUser(userId: string): ChatSession {
+    const chat: ChatSession = genAI.getGenerativeModel({ model: "gemini-2.5-pro" }).startChat({
         history: [
             {
                 role: "user",
@@ -30,9 +37,44 @@ export function createSessionForUser(userId: string): void {
         ]
     });
 
-    sessions.set(userId, {chat, createdAt: Date.now() });
+    sessions.set(userId, chat);
+    return chat;
 }
 
 export function getSessionForUser(userId: string) {
-    return sessions.get(userId)?.chat;
+    return sessions.get(userId);
+}
+
+export async function handleSession(req: { query: { userId: any; difficulty: any; includeMathThree: any; }; }, res: { json: (arg0: { problem: string; solution: string; }) => void; }) {
+    const { userId, difficulty, includeMathThree } = req.query;
+    const uid = String(userId);
+
+    let chat = getSessionForUser(uid);
+    if (!chat) {
+        chat = createSessionForUser(uid);
+    }
+
+    const range = includeMathThree === "true" ? "数学I・II・A・B・III" : "数学I・II・A・B";
+    const prompt = `難易度：${difficulty}\n出題範囲：${range}\n特別要求：特になし`;
+    const result = await chat.sendMessage(prompt);
+    const fullText = result.response.text().includes("<start>")
+        ? result.response.text().split("<start>").slice(-1)[0]
+        : "（生成に失敗しました）";
+    const [problemPart, restPart] = fullText.includes("<division>")
+        ? fullText.split("<division>")
+        : [fullText, "（解答・検証部分が見つかりませんでした）"];
+    const problem = problemPart.trim();
+    const solution = restPart.trim();
+
+    history.push({
+        userId: uid,
+        difficulty: String(difficulty),
+        includeMathThree: includeMathThree === "true",
+        problem,
+        solution,
+        timestamp: Date.now(),
+        tags: []
+    });
+
+    res.json({ problem, solution });
 }

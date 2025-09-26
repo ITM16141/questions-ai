@@ -23,7 +23,7 @@ export async function generate(difficulty: string): Promise<{
     const [problemPart, restPart] = fullText.split("### 🔍 *模範解答*");
 
     return {
-        problem: problemPart.trim(),
-        rest: restPart.trim()
+        problem: problemPart,
+        rest: restPart
     };
 }

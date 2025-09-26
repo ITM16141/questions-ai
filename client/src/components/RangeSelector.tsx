@@ -6,19 +6,16 @@ type Props = {
     disabled?: boolean;
 };
 
-const RangeSelector: React.FC<Props> = ({ value, onChange, disabled }) => (
-    <div style={{ marginBottom: "1rem" }}>
-        <label htmlFor="range">出題範囲：</label>
-        <select
-            id="range"
-            value={value ? "true" : "false"}
-            onChange={(e) => onChange(e.target.value === "true")}
-            disabled={disabled}
-        >
-            <option value="true">数学IIIを含む</option>
-            <option value="false">数学IIIを含まない</option>
-        </select>
-    </div>
-);
+function RangeSelector({ value, onChange, disabled }: Props) {
+    return (
+        <div style={{ marginBottom: "1rem" }}>
+            <label>出題範囲：</label>
+            <select value={value ? "true" : "false"} onChange={(e) => onChange(e.target.value === "true")} disabled={disabled}>
+                <option value="false">数学I・II・A・B・C</option>
+                <option value="true">数学I・II・III・A・B・C</option>
+            </select>
+        </div>
+    );
+}
 
 export default RangeSelector;

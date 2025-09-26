@@ -34,7 +34,9 @@ app.get("/api/problem", async (req, res) => {
     const userInput = `難易度：${difficulty}\n出題範囲：${range}\n特別要求：特になし`;
 
     const result = await chat.sendMessage(userInput);
-    const fullText = result.response.text();
+    const fullText = result.response.text().includes("<start>")
+        ? result.response.text().split("<start>").slice(-1)[0]
+        : "（生成に失敗しました）";
     const [problemPart, restPart] = fullText.includes("<division>")
         ? fullText.split("<division>")
         : [fullText, "（解答・検証部分が見つかりませんでした）"];

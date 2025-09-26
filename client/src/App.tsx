@@ -1,6 +1,6 @@
 import "./App.css";
 import React, { useEffect, useState } from "react";
-import {fetchProblem, fetchHistory, updateTags, updatePinned} from "./api";
+import {fetchProblem, fetchHistory, updateTags, updatePinned, updatePublic} from "./api";
 import DifficultySelector from "./components/DifficultySelector";
 import RangeSelector from "./components/RangeSelector";
 import MarkdownRenderer from "./components/MarkdownRenderer";
@@ -15,6 +15,7 @@ type HistoryEntry = {
     timestamp: number;
     tags: string[];
     pinned: boolean;
+    public: boolean;
 };
 
 function App() {
@@ -66,17 +67,23 @@ function App() {
         setHistory(updated);
     };
 
-    const filteredHistory = searchTag.trim()
-        ? history.filter(entry =>
-            entry.tags.some(tag => tag.toLowerCase().includes(searchTag.toLowerCase()))
-        )
-        : history;
-
     const handleTogglePin = async (id: string, current: boolean) => {
         await updatePinned(id, !current);
         const updated = await fetchHistory(userId);
         setHistory(updated);
     };
+
+    const handleTogglePublic = async (id: string, current: boolean) => {
+        await updatePublic(id, !current);
+        const updated = await fetchHistory(userId);
+        setHistory(updated);
+    };
+
+    const filteredHistory = searchTag.trim()
+        ? history.filter(entry =>
+            entry.tags.some(tag => tag.toLowerCase().includes(searchTag.toLowerCase()))
+        )
+        : history;
 
     const sortedHistory = [...filteredHistory].sort((a, b) => {
         if (a.pinned && !b.pinned) return -1;
@@ -133,6 +140,20 @@ function App() {
                     <div><strong>難易度：</strong>{entry.difficulty}</div>
                     <div><strong>出題範囲：</strong>{entry.includeMathThree ? "数学I〜III" : "数学I〜II"}</div>
                     <div><strong>日時：</strong>{new Date(entry.timestamp).toLocaleString()}</div>
+
+                    <button onClick={() => handleTogglePublic(entry.id, entry.public)}>
+                        {entry.public ? "🌐 公開解除" : "🌐 公開する"}
+                    </button>
+
+                    <button
+                        onClick={() => {
+                            const url = `${window.location.origin}/share/${entry.id}`;
+                            navigator.clipboard.writeText(url);
+                            alert("共有リンクをコピーしました！");
+                        }}
+                    >
+                        🔗 共有
+                    </button>
 
                     <button onClick={() => handleTogglePin(entry.id, entry.pinned)}>
                         {entry.pinned ? "📌 固定解除" : "📌 ピン留め"}

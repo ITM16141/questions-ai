@@ -31,3 +31,19 @@ export async function updatePinned(id: string, pinned: boolean) {
     if (!res.ok) throw new Error("ピン状態の更新に失敗しました");
     return await res.json();
 }
+
+export async function updatePublic(id: string, isPublic: boolean) {
+    const res = await fetch(`${BASE}/api/history/${id}/public`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ public: isPublic })
+    });
+    if (!res.ok) throw new Error("公開状態の更新に失敗しました");
+    return await res.json();
+}
+
+export async function fetchGallery() {
+    const res = await fetch(`${BASE}/api/gallery`);
+    if (!res.ok) throw new Error("ギャラリー取得に失敗しました");
+    return await res.json();
+}

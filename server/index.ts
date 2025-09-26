@@ -12,23 +12,34 @@ app.use(cors({
 
 app.get("/api/session", handleSession);
 
-app.get("/api/history", (req, res) => {
-    const { userId } = req.query;
-    const userHistory = history.filter(h => h.userId === userId);
-    res.json(userHistory);
-});
-
-app.patch("/api/history/:index/tags", (req, res) => {
-    const index = Number(req.params.index);
+app.patch("/api/history/:id/tags", (req, res) => {
+    const { id } = req.params;
     const { tags } = req.body;
 
     if (!Array.isArray(tags)) return res.status(400).json({ error: "tags must be an array" });
 
-    if (index < 0 || index >= history.length) return res.status(404).json({ error: "history entry not found" });
+    const entry = history.find(h => h.id === id);
+    if (!entry) return res.status(404).json({ error: "history entry not found" });
 
-    history[index].tags = tags;
+    entry.tags = tags;
     saveHistory(history);
     res.json({ success: true, tags });
+});
+
+app.patch("/api/history/:id/pin", (req, res) => {
+    const { id } = req.params;
+    const { pinned } = req.body;
+
+    if (typeof pinned !== "boolean") {
+        return res.status(400).json({ error: "pinned must be boolean" });
+    }
+
+    const entry = history.find(h => h.id === id);
+    if (!entry) return res.status(404).json({ error: "not found" });
+
+    entry.pinned = pinned;
+    saveHistory(history);
+    res.json({ success: true, pinned });
 });
 
 const PORT = process.env.PORT || 3000;

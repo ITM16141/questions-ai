@@ -2,8 +2,10 @@ import {ChatSession, GoogleGenerativeAI} from "@google/generative-ai";
 import path from "path";
 import fs from "fs";
 import {loadHistory, saveHistory} from "./storage";
+import { randomUUID } from "crypto";
 
 type HistoryEntry = {
+    id: string;
     userId: string;
     difficulty: string;
     includeMathThree: boolean;
@@ -11,6 +13,7 @@ type HistoryEntry = {
     solution: string;
     timestamp: number;
     tags: string[];
+    pinned: boolean;
 };
 
 export const history: HistoryEntry[] = loadHistory();
@@ -22,6 +25,10 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 function loadPrompt(): string {
     const filePath = path.join(process.cwd(), "prompts", "problem-generator.md");
     return fs.readFileSync(filePath, "utf-8");
+}
+
+export function getSessionForUser(userId: string) {
+    return sessions.get(userId);
 }
 
 export function createSessionForUser(userId: string): ChatSession {
@@ -40,10 +47,6 @@ export function createSessionForUser(userId: string): ChatSession {
 
     sessions.set(userId, chat);
     return chat;
-}
-
-export function getSessionForUser(userId: string) {
-    return sessions.get(userId);
 }
 
 export async function handleSession(req: { query: { userId: any; difficulty: any; includeMathThree: any; }; }, res: { json: (arg0: { problem: string; solution: string; }) => void; }) {
@@ -68,14 +71,17 @@ export async function handleSession(req: { query: { userId: any; difficulty: any
     const solution = restPart.trim();
 
     const entry: HistoryEntry = {
+        id: randomUUID(),
         userId: uid,
         difficulty: String(difficulty),
         includeMathThree: includeMathThree === "true",
         problem,
         solution,
         timestamp: Date.now(),
-        tags: []
+        tags: [],
+        pinned: false
     };
+
 
     history.push(entry);
     saveHistory(history);

@@ -1,0 +1,23 @@
+@keyframes fadeInOut {
+    0% { opacity: 0.2; }
+    50% { opacity: 1; }
+    100% { opacity: 0.2; }
+}
+
+.progress-message {
+    animation: fadeInOut 1.5s infinite;
+    font-weight: bold;
+    color: #555;
+}
+
+.loading-dots::after {
+    content: '';
+    animation: dots 1.5s steps(3, end) infinite;
+}
+
+@keyframes dots {
+    0% { content: ''; }
+    33% { content: '.'; }
+    66% { content: '..'; }
+    100% { content: '...'; }
+}

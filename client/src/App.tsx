@@ -96,7 +96,11 @@ function App() {
                 {loading ? "生成中…" : "問題を生成"}
             </button>
 
-            {loading && <div style={{ marginTop: "1rem" }}>{progressMessage}</div>}
+            {loading && (
+                <div className="progress-message loading-dots" style={{ marginTop: "1rem" }}>
+                    {progressMessage}
+                </div>
+            )}
 
             {problem && (
                 <>

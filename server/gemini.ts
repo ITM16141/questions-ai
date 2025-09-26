@@ -20,7 +20,7 @@ export async function generate(difficulty: string): Promise<{
     const result = await model.generateContent(prompt);
     const fullText = result.response.text();
 
-    const [problemPart, restPart] = fullText.split("### 🔍 *模範解答*");
+    const [problemPart, restPart] = fullText.split("<division>");
 
     return {
         problem: problemPart,

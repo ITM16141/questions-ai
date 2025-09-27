@@ -1,6 +1,7 @@
 import "./App.css";
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { v4 as uuid } from "uuid";
+import { SessionContext } from "./context/SessionContext";
 import DifficultySelector from "./components/DifficultySelector";
 import RangeSelector from "./components/RangeSelector";
 import MarkdownRenderer from "./components/MarkdownRenderer";

@@ -12,11 +12,9 @@ function App() {
     const [includeMathThree, setIncludeMathThree] = useState(false);
     const [problem, setProblem] = useState("");
     const [solution, setSolution] = useState("");
-    const [loading, setLoading] = useState(false);
     const [sessionId, setSessionId] = useState<string | null>(null);
-
     const [showSolution, setShowSolution] = useState(false);
-    const [progressMessage, setProgressMessage] = useState("");
+    const { loading, setLoading, progressMessage, setProgressMessage } = useContext(SessionContext);
 
     useEffect(() => {
         const saved = localStorage.getItem("activeSessionId");

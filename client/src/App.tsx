@@ -28,13 +28,11 @@ function App() {
 
     useEffect(() => {
         if (!sessionId) return;
-        console.log("Polling started for:", sessionId);
 
         const interval = setInterval(() => {
             fetch(`/api/session/status?sessionId=${sessionId}`)
             .then(res => res.json())
             .then(data => {
-                console.log("Polling result:", data);
                 if (data.status === "done") {
                     setProblem(data.result.problem);
                     setSolution(data.result.solution);

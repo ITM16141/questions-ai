@@ -26,7 +26,7 @@ function GalleryPage() {
             {entries.map((entry, idx) => (
                 <div key={idx} className="history-card">
                     <div><strong>難易度：</strong>{entry.difficulty}</div>
-                    <div><strong>出題範囲：</strong>{entry.includeMathThree ? "数学I〜III" : "数学I〜II"}</div>
+                    <div><strong>出題範囲：</strong>{entry.includeMathThree ? "数学I・II・III・A・B・C" : "数学I・II・A・B・C"}</div>
                     <div><strong>日時：</strong>{new Date(entry.timestamp).toLocaleString()}</div>
                     <div><strong>タグ：</strong>{entry.tags.join(", ")}</div>
                     <details>

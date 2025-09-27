@@ -119,6 +119,21 @@ app.get("/api/history", (req, res) => {
     res.json(parsed);
 });
 
+app.get("/api/gallery", (req, res) => {
+    const rows = db.prepare("SELECT * FROM history WHERE opened = 1 ORDER BY views DESC").all();
+    const parsed = rows.map(row => {
+        const r = row as RawHistoryRow;
+        return {
+            ...r,
+            includeMathThree: !!r.includeMathThree,
+            pinned: !!r.pinned,
+            tags: JSON.parse(r.tags)
+        };
+    });
+
+    res.json(parsed);
+});
+
 app.get("/api/share/:id", (req, res) => {
     const { id } = req.params;
     const row = db.prepare("SELECT * FROM history WHERE id = ?").get(id);

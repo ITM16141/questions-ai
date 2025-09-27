@@ -54,7 +54,7 @@ function App() {
         }, 2000);
 
         return () => clearInterval(interval);
-    }, [sessionId, setLoading, setProgressMessage]);
+    }, [sessionId]);
 
     const generate = async () => {
         setLoading(true);

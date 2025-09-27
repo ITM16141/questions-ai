@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { SessionProvider } from "./context/SessionContext";
 import App from "./App";
 import HistoryPage from "./HistoryPage";
 import GalleryPage from "./GalleryPage";

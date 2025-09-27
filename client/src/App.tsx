@@ -42,7 +42,7 @@ function App() {
                     localStorage.removeItem("activeSessionId");
                 } else if (data.status === "cancelled") {
                     setLoading(false);
-                    setProgressMessage("問題生成はキャンセルされました");
+                    setProgressMessage("パッケージの生成はキャンセルされました");
                     clearInterval(interval);
                     localStorage.removeItem("activeSessionId");
                 } else {

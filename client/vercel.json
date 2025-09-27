@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://questions-ai-hxms.onrender.com//api/$1"
+    }
+  ]
+}

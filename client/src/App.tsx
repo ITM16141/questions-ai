@@ -19,44 +19,53 @@ function App() {
 
     useEffect(() => {
         const saved = localStorage.getItem("activeSessionId");
-        if (saved) setSessionId(saved);
-    }, []);
+        if (saved) {
+            setSessionId(saved);
+            setLoading(true);
+            setProgressMessage("前回の生成を再開します");
+        }
+    }, [setLoading, setProgressMessage]);
 
     useEffect(() => {
         if (!sessionId) return;
 
         const interval = setInterval(() => {
-            fetch(`/api/session/status?sessionId=${sessionId}`)
-                .then(res => res.json())
-                .then(data => {
-                    if (data.status === "done") {
-                        setProblem(data.result.problem);
-                        setSolution(data.result.solution);
-                        clearInterval(interval);
-                        localStorage.removeItem("activeSessionId");
-                    }
-                })
-                .catch(() => clearInterval(interval));
+            fetch(/api/session/status?sessionId=${sessionId})
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === "done") {
+                    setProblem(data.result.problem);
+                    setSolution(data.result.solution);
+                    setLoading(false);
+                    setProgressMessage("問題生成が完了しました！");
+                    clearInterval(interval);
+                    localStorage.removeItem("activeSessionId");
+                } else {
+                    setProgressMessage("🌀 パッケージ構成中……問題および解答を生成しています");
+                }
+            })
+            .catch(() => {
+                setLoading(false);
+                clearInterval(interval);
+            });
         }, 2000);
 
         return () => clearInterval(interval);
-    }, [sessionId]);
+    }, [sessionId, setLoading, setProgressMessage]);
 
-    const generate = async () => {
+    const startGeneration = async () => {
+        setProblem("");
+        setSolution("");
         setLoading(true);
+        setProgressMessage("問題生成を開始しました…");
+
         const newSessionId = uuid();
         setSessionId(newSessionId);
         localStorage.setItem("activeSessionId", newSessionId);
 
-        setProgressMessage(" パッケージ構成中……問題および解答を生成しています");
-        const res = await fetch(`/api/session?sessionId=${newSessionId}&userId=${userId}&difficulty=${difficulty}&includeMathThree=${includeMathThree}`);
-        const data = await res.json();
-
-        setProblem(data.problem);
-        setSolution(data.solution);
-        localStorage.removeItem("activeSessionId");
-        setProgressMessage("✅ 完了しました！");
-        setLoading(false);
+        await fetch(
+            /api/session?sessionId=${newSessionId}&userId=${userId}&difficulty=${difficulty}&includeMathThree=${includeMathThree}
+        );
     };
 
     return (

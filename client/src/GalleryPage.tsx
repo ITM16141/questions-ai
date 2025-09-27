@@ -3,10 +3,13 @@ import { fetchGallery } from "./api";
 import MarkdownRenderer from "./components/MarkdownRenderer";
 import Tabs from "./components/Tabs";
 import {HistoryEntry} from "./types";
+import {useNavigate} from "react-router-dom";
 
 function GalleryPage() {
     const [entries, setEntries] = useState<HistoryEntry[]>([]);
     const [searchTag, setSearchTag] = useState("");
+    const [inputId, setInputId] = useState("");
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchGallery().then(setEntries);
@@ -22,6 +25,22 @@ function GalleryPage() {
         <div>
             <Tabs />
             <h1>🌐 公開ギャラリー</h1>
+            <h2>履歴IDから検索</h2>
+            <form
+                onSubmit={e => {
+                    e.preventDefault();
+                    if (inputId.trim()) navigate(`/share/${inputId.trim()}`);
+                }}
+            >
+                <input
+                    type="text"
+                    placeholder="履歴IDを入力して表示"
+                    value={inputId}
+                    onChange={e => setInputId(e.target.value)}
+                />
+                <button type="submit">表示</button>
+            </form>
+            <h2>タグから検索</h2>
             <input
                 type="text"
                 placeholder="タグで検索"

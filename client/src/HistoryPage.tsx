@@ -2,13 +2,12 @@ import { useEffect, useState } from "react";
 import {fetchHistory, updateTags, updatePinned, updatePublic} from "./api";
 import Tabs from "./components/Tabs";
 import {HistoryEntry} from "./types";
-import {useNavigate} from "react-router-dom";
+import MarkdownRenderer from "./components/MarkdownRenderer";
 
 function HistoryPage() {
     const [history, setHistory] = useState<HistoryEntry[]>([]);
     const [tagInputs, setTagInputs] = useState<Record<number, string>>({});
     const [searchTag, setSearchTag] = useState("");
-    const navigate = useNavigate();
     const userId = "your-user-id";
 
     useEffect(() => {
@@ -80,8 +79,13 @@ function HistoryPage() {
                         {entry.public ? "🌐 公開解除" : "🌐 公開する"}
                     </button>
 
-                    <button onClick={() => navigate(`/share/${entry.id}`)}>
-                        🔗 この履歴を表示
+                    <button
+                        onClick={() => {
+                            navigator.clipboard.writeText(entry.id);
+                            alert("履歴IDをコピーしました！");
+                        }}
+                    >
+                        🧾 履歴IDをコピー
                     </button>
 
                     <button onClick={() => handleTogglePin(entry.id, entry.pinned)}>
@@ -109,6 +113,15 @@ function HistoryPage() {
                         />
                         <button onClick={() => handleAddTag(entry.id, idx)}>追加</button>
                     </div>
+
+                    <details>
+                        <summary>📘 問題を見る</summary>
+                        <pre><MarkdownRenderer content={entry.problem} /></pre>
+                    </details>
+                    <details>
+                        <summary>🧠 解答を見る</summary>
+                        <pre><MarkdownRenderer content={entry.solution} /></pre>
+                    </details>
                 </div>
             ))}
         </div>

@@ -24,36 +24,55 @@ type RawHistoryRow = {
     public: boolean;
 };
 
-const sessions = new Map<
-    string,
-    { status: "pending" | "done"; result?: { problem: string; solution: string } }
->();
+type RawSessionRow = {
+    id: string;
+    status: "pending" | "done";
+    problem: string;
+    solution: string;
+}
 
 app.get("/api/session", async (req, res) => {
-    const { userId, difficulty, includeMathThree, sessionId } = req.query as {
-        [key: string]: string;
-    };
+    const { userId, difficulty, includeMathThree, sessionId } = req.query;
 
-    sessions.set(sessionId, { status: "pending" });
+    db.prepare(`
+        INSERT INTO sessions (id, status, problem, solution)
+        VALUES (?, ?, ?, ?)
+    `).run(sessionId, "pending", null, null);
 
-    
     handleSession({
         userId: String(userId),
         difficulty: String(difficulty),
         includeMathThree: includeMathThree === "true"
     }).then(result => {
-        sessions.set(sessionId, { status: "done", result });
+        db.prepare(`
+            UPDATE sessions SET status = ?, problem = ?, solution = ?
+            WHERE id = ?
+        `).run("done", result.problem, result.solution, sessionId);
     });
 
     res.json({ sessionId });
 });
 
+
 app.get("/api/session/status", (req, res) => {
-    const { sessionId } = req.query as { sessionId?: string };
-    const session = sessionId ? sessions.get(sessionId) : undefined;
-    if (!session) return res.status(404).json({ error: "not found" });
-    res.json(session);
+    const { sessionId } = req.query;
+    const session = db.prepare(`
+        SELECT status, problem, solution FROM sessions WHERE id = ?
+    `).get(sessionId) as RawSessionRow;
+
+    if (!session) {
+        return res.status(404).json({ error: "not found" });
+    }
+
+    res.json({
+        status: session.status,
+        result: {
+            problem: session.problem,
+            solution: session.solution
+        }
+    });
 });
+
 
 app.get("/api/history", (req, res) => {
     const { userId } = req.query;

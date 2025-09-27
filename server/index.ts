@@ -119,6 +119,33 @@ app.get("/api/history", (req, res) => {
     res.json(parsed);
 });
 
+app.patch("/api/history/:id/tags", (req, res) => {
+    const { id } = req.params;
+    const { tags } = req.body;
+    if (!Array.isArray(tags)) return res.status(400).json({ error: "tags must be array" });
+
+    db.prepare("UPDATE history SET tags = ? WHERE id = ?").run(JSON.stringify(tags), id);
+    res.json({ success: true, tags });
+});
+
+app.patch("/api/history/:id/pin", (req, res) => {
+    const { id } = req.params;
+    const { pinned } = req.body;
+    if (typeof pinned !== "boolean") return res.status(400).json({ error: "pinned must be boolean" });
+
+    db.prepare("UPDATE history SET pinned = ? WHERE id = ?").run(pinned ? 1 : 0, id);
+    res.json({ success: true, pinned });
+});
+
+app.patch("/api/history/:id/opened", (req, res) => {
+    const { id } = req.params;
+    const { opened: isOpened } = req.body;
+    if (typeof isOpened !== "boolean") return res.status(400).json({ error: "opened must be boolean" });
+
+    db.prepare("UPDATE history SET opened = ? WHERE id = ?").run(isOpened ? 1 : 0, id);
+    res.json({ success: true, opened: isOpened });
+});
+
 app.get("/api/gallery", (req, res) => {
     const rows = db.prepare("SELECT * FROM history WHERE opened = 1 ORDER BY views DESC").all();
     const parsed = rows.map(row => {
@@ -148,33 +175,6 @@ app.get("/api/share/:id", (req, res) => {
     };
 
     res.json(entry);
-});
-
-app.patch("/api/history/:id/tags", (req, res) => {
-    const { id } = req.params;
-    const { tags } = req.body;
-    if (!Array.isArray(tags)) return res.status(400).json({ error: "tags must be array" });
-
-    db.prepare("UPDATE history SET tags = ? WHERE id = ?").run(JSON.stringify(tags), id);
-    res.json({ success: true, tags });
-});
-
-app.patch("/api/history/:id/pin", (req, res) => {
-    const { id } = req.params;
-    const { pinned } = req.body;
-    if (typeof pinned !== "boolean") return res.status(400).json({ error: "pinned must be boolean" });
-
-    db.prepare("UPDATE history SET pinned = ? WHERE id = ?").run(pinned ? 1 : 0, id);
-    res.json({ success: true, pinned });
-});
-
-app.patch("/api/history/:id/opened", (req, res) => {
-    const { id } = req.params;
-    const { opened: isOpened } = req.body;
-    if (typeof isOpened !== "boolean") return res.status(400).json({ error: "opened must be boolean" });
-
-    db.prepare("UPDATE history SET opened = ? WHERE id = ?").run(isOpened ? 1 : 0, id);
-    res.json({ success: true, opened: isOpened });
 });
 
 const PORT = process.env.PORT || 4000;

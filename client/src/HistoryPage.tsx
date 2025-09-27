@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import {fetchHistory, updateTags, updatePinned, updatePublic} from "./api";
+import {fetchHistory, updateTags, updatePinned, updateOpened} from "./api";
 import Tabs from "./components/Tabs";
 import {HistoryEntry} from "./types";
 import MarkdownRenderer from "./components/MarkdownRenderer";
@@ -37,8 +37,8 @@ function HistoryPage() {
         setHistory(updated);
     };
 
-    const handleTogglePublic = async (id: string, current: boolean) => {
-        await updatePublic(id, !current);
+    const handleToggleOpened = async (id: string, current: boolean) => {
+        await updateOpened(id, !current);
         const updated = await fetchHistory(userId);
         setHistory(updated);
     };
@@ -75,8 +75,8 @@ function HistoryPage() {
                     <div><strong>閲覧数：</strong>{entry.views}</div>
                     <div><strong>タグ：</strong>{entry.tags.join(", ")}</div>
 
-                    <button onClick={() => handleTogglePublic(entry.id, entry.public)}>
-                        {entry.public ? "🌐 公開解除" : "🌐 公開する"}
+                    <button onClick={() => handleToggleOpened(entry.id, entry.opened)}>
+                        {entry.opened ? "🌐 公開解除" : "🌐 公開する"}
                     </button>
 
                     <button

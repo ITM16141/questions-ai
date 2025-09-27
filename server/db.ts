@@ -20,7 +20,7 @@ db.exec(`
        timestamp INTEGER,
        tags TEXT,
        pinned INTEGER,
-       public INTEGER,
+       opened INTEGER,
        views INTEGER
     )
 `);

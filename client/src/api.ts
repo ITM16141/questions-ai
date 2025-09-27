@@ -26,11 +26,11 @@ export async function updatePinned(id: string, pinned: boolean) {
     return await res.json();
 }
 
-export async function updatePublic(id: string, isPublic: boolean) {
-    const res = await fetch(`${BASE}/api/history/${id}/public`, {
+export async function updateOpened(id: string, isOpened: boolean) {
+    const res = await fetch(`${BASE}/api/history/${id}/opened`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ public: isPublic })
+        body: JSON.stringify({ opened: isOpened })
     });
     if (!res.ok) throw new Error("公開状態の更新に失敗しました");
     return await res.json();

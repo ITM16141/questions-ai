@@ -21,7 +21,7 @@ type RawHistoryRow = {
     timestamp: number;
     tags: string;
     pinned: number;
-    public: boolean;
+    opened: boolean;
 };
 
 type RawSessionRow = {
@@ -48,6 +48,26 @@ app.get("/api/session", async (req, res) => {
             UPDATE sessions SET status = ?, problem = ?, solution = ?
             WHERE id = ?
         `).run("done", result.problem, result.solution, sessionId);
+
+        db.prepare(`
+            INSERT INTO history (
+                id, userId, difficulty, includeMathThree,
+                problem, solution, timestamp,
+                tags, pinned, opened, views
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `).run(
+            sessionId,
+            userId,
+            difficulty,
+            includeMathThree ? 1 : 0,
+            result.problem,
+            result.solution,
+            Date.now(),
+            "",
+            0,
+            0,
+            0
+        );
     });
 
     res.json({ sessionId });
@@ -105,21 +125,6 @@ app.get("/api/share/:id", (req, res) => {
     res.json(entry);
 });
 
-app.get("/api/gallery", (req, res) => {
-    const rows = db.prepare("SELECT * FROM history WHERE public = 1 ORDER BY views DESC").all();
-    const parsed = rows.map(row => {
-        const r = row as RawHistoryRow;
-        return {
-            ...r,
-            includeMathThree: !!r.includeMathThree,
-            pinned: !!r.pinned,
-            public: r.public,
-            tags: JSON.parse(r.tags)
-        }
-    });
-    res.json(parsed);
-});
-
 app.patch("/api/history/:id/tags", (req, res) => {
     const { id } = req.params;
     const { tags } = req.body;
@@ -138,13 +143,13 @@ app.patch("/api/history/:id/pin", (req, res) => {
     res.json({ success: true, pinned });
 });
 
-app.patch("/api/history/:id/public", (req, res) => {
+app.patch("/api/history/:id/opened", (req, res) => {
     const { id } = req.params;
-    const { public: isPublic } = req.body;
-    if (typeof isPublic !== "boolean") return res.status(400).json({ error: "public must be boolean" });
+    const { opened: isOpened } = req.body;
+    if (typeof isOpened !== "boolean") return res.status(400).json({ error: "opened must be boolean" });
 
-    db.prepare("UPDATE history SET public = ? WHERE id = ?").run(isPublic ? 1 : 0, id);
-    res.json({ success: true, public: isPublic });
+    db.prepare("UPDATE history SET opened = ? WHERE id = ?").run(isOpened ? 1 : 0, id);
+    res.json({ success: true, opened: isOpened });
 });
 
 const PORT = process.env.PORT || 4000;

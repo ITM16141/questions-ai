@@ -74,7 +74,7 @@ export async function handleSession(params: {
             timestamp,
             tags,
             pinned,
-            public
+            opened
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `).run(
         id,

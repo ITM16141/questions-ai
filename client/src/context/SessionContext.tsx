@@ -1,24 +1,26 @@
-import { createContext, useState } from "react";
+import React, { createContext, useState } from "react";
 
 export const SessionContext = createContext<{
-  loading: boolean;
-  setLoading: (v: boolean) => void;
-  progressMessage: string;
-  setProgressMessage: (v: string) => void;
+    loading: boolean;
+    setLoading: (v: boolean) => void;
+    progressMessage: string;
+    setProgressMessage: (v: string) => void;
 }>({
-  loading: false,
-  setLoading: () => {},
-  progressMessage: "",
-  setProgressMessage: () => {}
+    loading: false,
+    setLoading: () => {},
+    progressMessage: "",
+    setProgressMessage: () => {}
 });
 
 export function SessionProvider({ children }: { children: React.ReactNode }) {
-  const [loading, setLoading] = useState(false);
-  const [progressMessage, setProgressMessage] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [progressMessage, setProgressMessage] = useState("");
 
-  return (
-    <SessionContext.Provider value={{ loading, setLoading, progressMessage, setProgressMessage }}>
-      {children}
-    </SessionContext.Provider>
-  );
+    return (
+        <SessionContext.Provider
+            value={{ loading, setLoading, progressMessage, setProgressMessage }}
+        >
+            {children}
+        </SessionContext.Provider>
+    );
 }

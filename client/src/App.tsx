@@ -30,7 +30,7 @@ function App() {
         if (!sessionId) return;
 
         const interval = setInterval(() => {
-            fetch(/api/session/status?sessionId=${sessionId})
+            fetch(`/api/session/status?sessionId=${sessionId}`)
             .then(res => res.json())
             .then(data => {
                 if (data.status === "done") {
@@ -53,7 +53,7 @@ function App() {
         return () => clearInterval(interval);
     }, [sessionId, setLoading, setProgressMessage]);
 
-    const startGeneration = async () => {
+    const generate = async () => {
         setProblem("");
         setSolution("");
         setLoading(true);
@@ -64,7 +64,7 @@ function App() {
         localStorage.setItem("activeSessionId", newSessionId);
 
         await fetch(
-            /api/session?sessionId=${newSessionId}&userId=${userId}&difficulty=${difficulty}&includeMathThree=${includeMathThree}
+            `/api/session?sessionId=${newSessionId}&userId=${userId}&difficulty=${difficulty}&includeMathThree=${includeMathThree}`
         );
     };
 

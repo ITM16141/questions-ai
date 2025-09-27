@@ -64,9 +64,30 @@ export async function handleSession(params: {
     const timestamp = Date.now();
 
     db.prepare(`
-        INSERT INTO history (id, userId, difficulty, includeMathThree, problem, solution, timestamp, tags, pinned, public)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `).run(id, uid, difficulty, includeMathThree ? 1 : 0, problem, solution, timestamp, JSON.stringify([]), 0, 0);
+        INSERT INTO history (
+            id,
+            userId,
+            difficulty,
+            includeMathThree,
+            problem,
+            solution,
+            timestamp,
+            tags,
+            pinned,
+            public
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `).run(
+        id,
+        uid,
+        difficulty,
+        includeMathThree ? 1 : 0,
+        problem,
+        solution,
+        timestamp,
+        JSON.stringify([]),
+        0,
+        0
+    );
 
     return {
         id,

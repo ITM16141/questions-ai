@@ -5,6 +5,11 @@ import db from "./db";
 
 const app = express();
 app.use(express.json());
+app.use(cors({
+    origin: "https://questions-ai-two.vercel.app",
+    methods: ["GET", "POST", "PATCH"],
+    credentials: true
+}));
 
 type RawHistoryRow = {
     id: string;
@@ -19,11 +24,10 @@ type RawHistoryRow = {
     public: boolean;
 };
 
-app.use(cors({
-    origin: "https://questions-ai-two.vercel.app",
-    methods: ["GET", "POST", "PATCH"],
-    credentials: true
-}));
+const sessions = new Map<
+    string,
+    { status: "pending" | "done"; result?: { problem: string; solution: string } }
+>();
 
 app.get("/api/session", async (req, res) => {
     const { userId, difficulty, includeMathThree, sessionId } = req.query as {
@@ -36,8 +40,7 @@ app.get("/api/session", async (req, res) => {
         const result = await handleSession({
             userId,
             difficulty,
-            includeMathThree: includeMathThree === "true",
-            sessionId
+            includeMathThree: includeMathThree === "true"
         });
         sessions.set(sessionId, { status: "done", result });
         res.json({ sessionId });
@@ -53,7 +56,6 @@ app.get("/api/session/status", (req, res) => {
     if (!session) return res.status(404).json({ error: "not found" });
     res.json(session);
 });
-
 
 app.get("/api/history", (req, res) => {
     const { userId } = req.query;

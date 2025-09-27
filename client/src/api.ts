@@ -1,11 +1,5 @@
 const BASE = import.meta.env.VITE_API_BASE_URL;
 
-export async function fetchProblem(userId: string, difficulty: string, includeMathThree: boolean) {
-    const res = await fetch(`${BASE}/api/session?userId=${userId}&difficulty=${encodeURIComponent(difficulty)}&includeMathThree=${includeMathThree}`);
-    if (!res.ok) throw new Error("問題生成に失敗しました");
-    return await res.json();
-}
-
 export async function fetchHistory(userId: string) {
     const res = await fetch(`${BASE}/api/history?userId=${userId}`);
     if (!res.ok) throw new Error("履歴取得に失敗しました");

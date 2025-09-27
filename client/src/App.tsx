@@ -57,7 +57,7 @@ function App() {
         setProblem("");
         setSolution("");
         setLoading(true);
-        setProgressMessage("問題生成を開始しました…");
+        setProgressMessage("問題生成を開始しました");
 
         const newSessionId = uuid();
         setSessionId(newSessionId);

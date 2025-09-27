@@ -53,7 +53,6 @@ app.get("/api/session", async (req, res) => {
     res.json({ sessionId });
 });
 
-
 app.get("/api/session/status", (req, res) => {
     const { sessionId } = req.query;
     const session = db.prepare(`

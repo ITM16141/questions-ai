@@ -26,15 +26,32 @@ app.use(cors({
 }));
 
 app.get("/api/session", async (req, res) => {
-    const { userId, difficulty, includeMathThree } = req.query;
+    const { userId, difficulty, includeMathThree, sessionId } = req.query as {
+        [key: string]: string;
+    };
 
-    const result = await handleSession({
-        userId: String(userId),
-        difficulty: String(difficulty),
-        includeMathThree: includeMathThree === "true"
-    });
+    sessions.set(sessionId, { status: "pending" });
 
-    res.json(result);
+    try {
+        const result = await handleSession({
+            userId,
+            difficulty,
+            includeMathThree: includeMathThree === "true",
+            sessionId
+        });
+        sessions.set(sessionId, { status: "done", result });
+        res.json({ sessionId });
+    } catch {
+        sessions.delete(sessionId);
+        res.status(500).json({ error: "Generation failed" });
+    }
+});
+
+app.get("/api/session/status", (req, res) => {
+    const { sessionId } = req.query as { sessionId?: string };
+    const session = sessionId ? sessions.get(sessionId) : undefined;
+    if (!session) return res.status(404).json({ error: "not found" });
+    res.json(session);
 });
 
 

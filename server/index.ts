@@ -40,8 +40,7 @@ app.get("/api/session", async (req, res) => {
     handleSession({
         userId: String(userId),
         difficulty: String(difficulty),
-        includeMathThree: includeMathThree === "true",
-        sessionId: String(sessionId)
+        includeMathThree: includeMathThree === "true"
     }).then(result => {
         sessions.set(sessionId, { status: "done", result });
     });

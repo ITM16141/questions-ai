@@ -25,7 +25,18 @@ app.use(cors({
     credentials: true
 }));
 
-app.get("/api/session", handleSession);
+app.get("/api/session", async (req, res) => {
+    const { userId, difficulty, includeMathThree } = req.query;
+
+    const result = await handleSession({
+        userId: String(userId),
+        difficulty: String(difficulty),
+        includeMathThree: includeMathThree === "true"
+    });
+
+    res.json(result);
+});
+
 
 app.get("/api/history", (req, res) => {
     const { userId } = req.query;

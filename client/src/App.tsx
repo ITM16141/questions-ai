@@ -1,6 +1,6 @@
 import "./App.css";
-import React, { useState } from "react";
-import {fetchProblem} from "./api";
+import React, {useEffect, useState} from "react";
+import { v4 as uuid } from "uuid";
 import DifficultySelector from "./components/DifficultySelector";
 import RangeSelector from "./components/RangeSelector";
 import MarkdownRenderer from "./components/MarkdownRenderer";
@@ -13,18 +13,49 @@ function App() {
     const [problem, setProblem] = useState("");
     const [solution, setSolution] = useState("");
     const [loading, setLoading] = useState(false);
+    const [sessionId, setSessionId] = useState<string | null>(null);
 
     const [showSolution, setShowSolution] = useState(false);
     const [progressMessage, setProgressMessage] = useState("");
 
+    useEffect(() => {
+        const saved = localStorage.getItem("activeSessionId");
+        if (saved) setSessionId(saved);
+    }, []);
+
+    useEffect(() => {
+        if (!sessionId) return;
+
+        const interval = setInterval(() => {
+            fetch(`/api/session/status?sessionId=${sessionId}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === "done") {
+                        setProblem(data.result.problem);
+                        setSolution(data.result.solution);
+                        clearInterval(interval);
+                        localStorage.removeItem("activeSessionId");
+                    }
+                })
+                .catch(() => clearInterval(interval));
+        }, 2000);
+
+        return () => clearInterval(interval);
+    }, [sessionId]);
+
     const generate = async () => {
         setLoading(true);
+        const newSessionId = uuid();
+        setSessionId(newSessionId);
+        localStorage.setItem("activeSessionId", newSessionId);
 
         setProgressMessage(" パッケージ構成中……問題および解答を生成しています");
-        const { problem, solution } = await fetchProblem(userId, difficulty, includeMathThree);
+        const res = await fetch(`/api/session?sessionId=${newSessionId}&userId=${userId}&difficulty=${difficulty}&includeMathThree=${includeMathThree}`);
+        const data = await res.json();
 
-        setProblem(problem);
-        setSolution(solution);
+        setProblem(data.problem);
+        setSolution(data.solution);
+        localStorage.removeItem("activeSessionId");
         setProgressMessage("✅ 完了しました！");
         setLoading(false);
     };

@@ -1,4 +1,3 @@
-import { Request, Response } from "express";
 import {ChatSession, GoogleGenerativeAI} from "@google/generative-ai";
 import path from "path";
 import fs from "fs";
@@ -36,8 +35,12 @@ export function createSessionForUser(userId: string): ChatSession {
     return chat;
 }
 
-export async function handleSession(req: Request, res: Response) {
-    const { userId, difficulty, includeMathThree } = req.query;
+export async function handleSession(params: {
+    userId: string;
+    difficulty: string;
+    includeMathThree: boolean;
+}) {
+    const { userId, difficulty, includeMathThree} = params;
     const uid = String(userId);
 
     let chat = getSessionForUser(uid);
@@ -45,7 +48,7 @@ export async function handleSession(req: Request, res: Response) {
         chat = createSessionForUser(uid);
     }
 
-    const range = includeMathThree === "true" ? "数学I・II・A・B・III" : "数学I・II・A・B";
+    const range = includeMathThree ? "数学I・II・A・B・III" : "数学I・II・A・B";
     const prompt = `難易度：${difficulty}\n出題範囲：${range}\n特別要求：特になし`;
     const result = await chat.sendMessage(prompt);
     const fullText = result.response.text().includes("{start}")
@@ -63,7 +66,12 @@ export async function handleSession(req: Request, res: Response) {
     db.prepare(`
         INSERT INTO history (id, userId, difficulty, includeMathThree, problem, solution, timestamp, tags, pinned, public)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `).run(id, uid, difficulty, includeMathThree === "true" ? 1 : 0, problem, solution, timestamp, JSON.stringify([]), 0, 0);
+    `).run(id, uid, difficulty, includeMathThree ? 1 : 0, problem, solution, timestamp, JSON.stringify([]), 0, 0);
 
-    res.json({ problem, solution });
+    return {
+        id,
+        problem: problem,
+        solution: solution
+    };
+
 }

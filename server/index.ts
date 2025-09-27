@@ -36,18 +36,17 @@ app.get("/api/session", async (req, res) => {
 
     sessions.set(sessionId, { status: "pending" });
 
-    try {
-        const result = await handleSession({
-            userId,
-            difficulty,
-            includeMathThree: includeMathThree === "true"
-        });
+    
+    handleSession({
+        userId: String(userId),
+        difficulty: String(difficulty),
+        includeMathThree: includeMathThree === "true",
+        sessionId: String(sessionId)
+    }).then(result => {
         sessions.set(sessionId, { status: "done", result });
-        res.json({ sessionId });
-    } catch {
-        sessions.delete(sessionId);
-        res.status(500).json({ error: "Generation failed" });
-    }
+    });
+
+    res.json({ sessionId });
 });
 
 app.get("/api/session/status", (req, res) => {

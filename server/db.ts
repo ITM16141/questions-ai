@@ -24,11 +24,4 @@ db.exec(`
     )
 `);
 
-try {
-    db.prepare("SELECT public FROM history LIMIT 1").get();
-} catch {
-    db.exec("ALTER TABLE history ADD COLUMN public INTEGER DEFAULT 0");
-}
-
-
 export default db;

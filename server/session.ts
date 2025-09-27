@@ -48,11 +48,11 @@ export async function handleSession(req: Request, res: Response) {
     const range = includeMathThree === "true" ? "数学I・II・A・B・III" : "数学I・II・A・B";
     const prompt = `難易度：${difficulty}\n出題範囲：${range}\n特別要求：特になし`;
     const result = await chat.sendMessage(prompt);
-    const fullText = result.response.text().includes("<start>")
-        ? result.response.text().split("<start>").slice(-1)[0]
+    const fullText = result.response.text().includes("{start}")
+        ? result.response.text().split("{start}").slice(-1)[0]
         : "（生成に失敗しました）";
-    const [problemPart, restPart] = fullText.includes("<division>")
-        ? fullText.split("<division>")
+    const [problemPart, restPart] = fullText.includes("{division}")
+        ? fullText.split("{division}")
         : [fullText, "（解答・検証部分が見つかりませんでした）"];
     const problem = problemPart.trim();
     const solution = restPart.trim();

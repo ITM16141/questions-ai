@@ -24,7 +24,7 @@ function App() {
             setLoading(true);
             setProgressMessage("前回の生成を再開します");
         }
-    }, [setLoading, setProgressMessage]);
+    }, []);
 
     useEffect(() => {
         if (!sessionId) return;
@@ -57,6 +57,8 @@ function App() {
     }, [sessionId]);
 
     const generate = async () => {
+        setProblem("");
+        setSolution("");
         setLoading(true);
         setProgressMessage("パッケージの生成を開始しました");
 

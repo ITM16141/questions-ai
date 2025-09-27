@@ -2,20 +2,7 @@ import { useEffect, useState } from "react";
 import { fetchGallery } from "./api";
 import MarkdownRenderer from "./components/MarkdownRenderer";
 import Tabs from "./components/Tabs";
-
-type HistoryEntry = {
-    id: string;
-    userId: string;
-    difficulty: string;
-    includeMathThree: boolean;
-    problem: string;
-    solution: string;
-    timestamp: number;
-    tags: string[];
-    pinned: boolean;
-    public: boolean;
-    views: number;
-};
+import {HistoryEntry} from "./types";
 
 function GalleryPage() {
     const [entries, setEntries] = useState<HistoryEntry[]>([]);

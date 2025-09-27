@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { fetchGallery } from "./api";
 import MarkdownRenderer from "./components/MarkdownRenderer";
+import Tabs from "./components/Tabs";
 
 type HistoryEntry = {
     id: string;
@@ -32,6 +33,7 @@ function GalleryPage() {
 
     return (
         <div>
+            <Tabs />
             <h1>🌐 公開ギャラリー</h1>
             <input
                 type="text"

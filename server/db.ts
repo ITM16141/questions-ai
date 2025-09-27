@@ -25,11 +25,4 @@ db.exec(`
     )
 `);
 
-try {
-    db.prepare("SELECT views FROM history LIMIT 1").get();
-} catch {
-    db.exec("ALTER TABLE history ADD COLUMN views INTEGER DEFAULT 0");
-}
-
-
 export default db;

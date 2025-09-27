@@ -1,4 +1,4 @@
-const BASE = process.env.VITE_API_BASE_URL!;
+const BASE = import.meta.env.VITE_API_BASE_URL!;
 
 export async function fetchHistory(userId: string) {
     const res = await fetch(`${BASE}/api/history?userId=${userId}`);

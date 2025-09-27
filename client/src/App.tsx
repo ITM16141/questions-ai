@@ -31,12 +31,7 @@ function App() {
 
         const interval = setInterval(() => {
             fetch(`/api/session/status?sessionId=${sessionId}`)
-            .then(res => {
-                if (!res.ok) {
-                    throw new Error(`Status check failed: ${res.status}`);
-                }
-                return res.json();
-            })
+            .then(res => res.json())
             .then(data => {
                 if (data.status === "done") {
                     setProblem(data.result.problem);
@@ -52,7 +47,7 @@ function App() {
             .catch(err => {
                 console.error("Polling error:", err);
                 setLoading(false);
-                setProgressMessage("セッションの確認に失敗しました");
+                setProgressMessage("セッションの確認に失敗しました")
                 clearInterval(interval);
             });
         }, 2000);

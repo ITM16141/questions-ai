@@ -42,7 +42,6 @@ app.get("/api/session", async (req, res) => {
         difficulty: String(difficulty),
         includeMathThree: includeMathThree === "true"
     }).then(result => {
-        console.log("Session completed:", sessionId)
         sessions.set(sessionId, { status: "done", result });
     });
 
@@ -52,7 +51,6 @@ app.get("/api/session", async (req, res) => {
 app.get("/api/session/status", (req, res) => {
     const { sessionId } = req.query as { sessionId?: string };
     const session = sessionId ? sessions.get(sessionId) : undefined;
-    console.log("Status check for:", sessionId, "->", session);
     if (!session) return res.status(404).json({ error: "not found" });
     res.json(session);
 });

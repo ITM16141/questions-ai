@@ -7,7 +7,7 @@ import RangeSelector from "./components/RangeSelector";
 import MarkdownRenderer from "./components/MarkdownRenderer";
 import Tabs from "./components/Tabs";
 
-function App() {
+const App: React.FC = () => {
     const [userId] = useState("your-user-id");
     const [difficulty, setDifficulty] = useState("標準レベル");
     const [includeMathThree, setIncludeMathThree] = useState(false);
@@ -128,6 +128,6 @@ function App() {
             )}
         </div>
     );
-}
+};
 
 export default App;

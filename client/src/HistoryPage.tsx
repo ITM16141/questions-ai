@@ -8,7 +8,7 @@ function HistoryPage() {
     const [history, setHistory] = useState<HistoryEntry[]>([]);
     const [tagInputs, setTagInputs] = useState<Record<number, string>>({});
     const [searchTag, setSearchTag] = useState("");
-    const userId = "your-user-id";
+    const userId = localStorage.getItem("userId") as string;
 
     useEffect(() => {
         fetchHistory(userId).then(setHistory);

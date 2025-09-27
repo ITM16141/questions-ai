@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import {fetchHistory, updateTags, updatePinned, updatePublic} from "./api";
 import Tabs from "./components/Tabs";
-import MarkdownRenderer from "./components/MarkdownRenderer";
 import {HistoryEntry} from "./types";
 import {useNavigate} from "react-router-dom";
 

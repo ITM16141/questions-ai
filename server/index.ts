@@ -73,6 +73,16 @@ app.get("/api/session", async (req, res) => {
     res.json({ sessionId });
 });
 
+app.post("/api/session/cancel", (req, res) => {
+    const { sessionId } = req.body;
+
+    db.prepare(`
+        UPDATE sessions SET status = 'cancelled' WHERE id = ?
+  ` ).run(sessionId);
+
+    res.json({ success: true });
+});
+
 app.get("/api/session/status", (req, res) => {
     const { sessionId } = req.query;
     const session = db.prepare(`

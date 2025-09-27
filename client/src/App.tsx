@@ -40,6 +40,11 @@ function App() {
                     setProgressMessage("パッケージの生成が完了しました！");
                     clearInterval(interval);
                     localStorage.removeItem("activeSessionId");
+                } else if (data.status === "cancelled") {
+                    setLoading(false);
+                    setProgressMessage("問題生成はキャンセルされました");
+                    clearInterval(interval);
+                    localStorage.removeItem("activeSessionId");
                 } else {
                     setProgressMessage("🌀 パッケージ構成中……問題および解答を生成しています");
                 }
@@ -70,6 +75,17 @@ function App() {
         );
     };
 
+    const handleCancel = async () => {
+        if (!sessionId) return;
+        await fetch(`/api/session/cancel`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ sessionId })
+        });
+        setLoading(false);
+        setProgressMessage("パッケージの生成はキャンセルされました");
+    };
+
     return (
         <div>
             <Tabs />
@@ -78,9 +94,15 @@ function App() {
             <DifficultySelector value={difficulty} onChange={setDifficulty} disabled={loading} />
             <RangeSelector value={includeMathThree} onChange={setIncludeMathThree} disabled={loading} />
 
-            <button onClick={generate} disabled={loading}>
-                {loading ? "生成中…" : "問題を生成"}
-            </button>
+            {!loading ? (
+                <button onClick={generate} className="generate-button">
+                    問題を生成
+                </button>
+            ) : (
+                <button onClick={handleCancel} className="cancel-button">
+                    キャンセル
+                </button>
+            )}
 
             {loading && (
                 <div className="progress-message loading-dots" style={{ marginTop: "1rem" }}>

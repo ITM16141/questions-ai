@@ -1,3 +1,13 @@
+.generate-button {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.cancel-button {
+    background-color: #f44336;
+    color: white;
+}
+
 @keyframes fadeInOut {
     0% { opacity: 0.2; }
     50% { opacity: 1; }

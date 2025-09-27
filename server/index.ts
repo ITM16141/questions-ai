@@ -161,22 +161,6 @@ app.get("/api/gallery", (req, res) => {
     res.json(parsed);
 });
 
-app.get("/api/share/:id", (req, res) => {
-    const { id } = req.params;
-    const row = db.prepare("SELECT * FROM history WHERE id = ?").get(id);
-    if (!row) return res.status(404).json({ error: "not found" });
-
-    const r = row as RawHistoryRow;
-    const entry = {
-        ...r,
-        includeMathThree: !!r.includeMathThree,
-        pinned: !!r.pinned,
-        tags: JSON.parse(r.tags)
-    };
-
-    res.json(entry);
-});
-
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

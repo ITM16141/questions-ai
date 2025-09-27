@@ -28,11 +28,13 @@ function App() {
 
     useEffect(() => {
         if (!sessionId) return;
+        console.log("Polling started for:", sessionId);
 
         const interval = setInterval(() => {
             fetch(`/api/session/status?sessionId=${sessionId}`)
             .then(res => res.json())
             .then(data => {
+                console.log("Polling result:", data);
                 if (data.status === "done") {
                     setProblem(data.result.problem);
                     setSolution(data.result.solution);
@@ -44,7 +46,8 @@ function App() {
                     setProgressMessage("🌀 パッケージ構成中……問題および解答を生成しています");
                 }
             })
-            .catch(() => {
+            .catch(err => {
+                console.error("Polling error:", err);
                 setLoading(false);
                 clearInterval(interval);
             });
@@ -54,8 +57,6 @@ function App() {
     }, [sessionId, setLoading, setProgressMessage]);
 
     const generate = async () => {
-        setProblem("");
-        setSolution("");
         setLoading(true);
         setProgressMessage("パッケージの生成を開始しました");
 

@@ -37,7 +37,7 @@ function App() {
                     setProblem(data.result.problem);
                     setSolution(data.result.solution);
                     setLoading(false);
-                    setProgressMessage("問題生成が完了しました！");
+                    setProgressMessage("パッケージの生成が完了しました！");
                     clearInterval(interval);
                     localStorage.removeItem("activeSessionId");
                 } else {
@@ -57,7 +57,7 @@ function App() {
         setProblem("");
         setSolution("");
         setLoading(true);
-        setProgressMessage("問題生成を開始しました");
+        setProgressMessage("パッケージの生成を開始しました");
 
         const newSessionId = uuid();
         setSessionId(newSessionId);

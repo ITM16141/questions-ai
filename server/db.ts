@@ -20,8 +20,16 @@ db.exec(`
        timestamp INTEGER,
        tags TEXT,
        pinned INTEGER,
-       public INTEGER
+       public INTEGER,
+       views INTEGER
     )
 `);
+
+try {
+    db.prepare("SELECT views FROM history LIMIT 1").get();
+} catch {
+    db.exec("ALTER TABLE history ADD COLUMN views INTEGER DEFAULT 0");
+}
+
 
 export default db;

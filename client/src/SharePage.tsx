@@ -12,6 +12,8 @@ type HistoryEntry = {
     timestamp: number;
     tags: string[];
     pinned: boolean;
+    public: boolean;
+    views: number;
 };
 
 function SharePage() {

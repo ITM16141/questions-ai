@@ -16,6 +16,7 @@ type HistoryEntry = {
     tags: string[];
     pinned: boolean;
     public: boolean;
+    views: number;
 };
 
 function App() {

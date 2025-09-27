@@ -45,6 +45,8 @@ app.get("/api/history", (req, res) => {
 
 app.get("/api/share/:id", (req, res) => {
     const { id } = req.params;
+    db.prepare("UPDATE history SET views = views + 1 WHERE id = ?").run(id); // ✅ 閲覧数加算
+
     const row = db.prepare("SELECT * FROM history WHERE id = ?").get(id);
     if (!row) return res.status(404).json({ error: "not found" });
 
@@ -60,7 +62,7 @@ app.get("/api/share/:id", (req, res) => {
 });
 
 app.get("/api/gallery", (req, res) => {
-    const rows = db.prepare("SELECT * FROM history WHERE public = 1 ORDER BY timestamp DESC").all();
+    const rows = db.prepare("SELECT * FROM history WHERE public = 1 ORDER BY views DESC").all();
     const parsed = rows.map(row => {
         const r = row as RawHistoryRow;
         return {

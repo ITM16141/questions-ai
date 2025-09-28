@@ -57,7 +57,7 @@ const HistoryPage: React.FC = () => {
     });
 
     return (
-        <div>
+        <div className="app">
             <Tabs />
             <h1>📚 履歴</h1>
             <input

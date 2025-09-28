@@ -89,8 +89,8 @@ textarea {
     border-radius: 6px;
 }
 
-.problem-block,
-.solution-block,
+.problem-block pre,
+.solution-block pre,
 .history-card,
 .gallery-card {
     background: white;
@@ -98,7 +98,9 @@ textarea {
     margin-bottom: 1rem;
     border-radius: 8px;
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
-    word-break: break-word;
+    white-space: pre-wrap;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 .meta {
@@ -121,6 +123,8 @@ textarea {
     .solution-block pre {
         font-size: 0.9rem;
         white-space: pre-wrap;
+        max-width: 100%;
+        box-sizing: border-box;
     }
 
     .meta {

@@ -23,7 +23,7 @@ const GalleryPage: React.FC = () => {
         : entries;
 
     return (
-        <div>
+        <div className="app">
             <Tabs />
             <h1>🌐 公開ギャラリー</h1>
             <h2>履歴IDから検索</h2>

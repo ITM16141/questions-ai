@@ -112,7 +112,9 @@ const App: React.FC = () => {
 
             {problem && (
                 <>
-                    <MarkdownRenderer content={problem} />
+                    <div className="problem-block">
+                        <pre><MarkdownRenderer content={problem} /></pre>
+                    </div>
                     <div style={{ marginTop: "1rem" }}>
                         <button onClick={() => setShowSolution(!showSolution)}>
                             {showSolution ? "解答・検証を隠す" : "解答・検証を見る"}
@@ -121,7 +123,9 @@ const App: React.FC = () => {
 
                     {showSolution && (
                         <>
-                            <MarkdownRenderer content={solution} />
+                            <div className=solution-block>
+                                <pre><MarkdownRenderer content={solution} /></pre>
+                            </div>
                         </>
                     )}
                 </>

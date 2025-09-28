@@ -8,7 +8,7 @@ import MarkdownRenderer from "./components/MarkdownRenderer";
 import Tabs from "./components/Tabs";
 
 const App: React.FC = () => {
-    const [userId] = useState("your-user-id");
+    const userId = localStorage.getItem("userId") as string;
     const [difficulty, setDifficulty] = useState("標準レベル");
     const [includeMathThree, setIncludeMathThree] = useState(false);
     const [problem, setProblem] = useState("");

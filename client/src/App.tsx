@@ -123,7 +123,7 @@ const App: React.FC = () => {
 
                     {showSolution && (
                         <>
-                            <div className=solution-block>
+                            <div className="solution-block">
                                 <pre><MarkdownRenderer content={solution} /></pre>
                             </div>
                         </>

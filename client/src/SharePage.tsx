@@ -17,7 +17,6 @@ function SharePage() {
 
     if (!entry) return <p>履歴が見つかりませんでした。</p>;
 
-
     return (
         <div>
             <Tabs />

@@ -2,11 +2,6 @@ import Database from "better-sqlite3";
 import path from "path";
 import fs from "fs";
 
-const dataDir = "/var/data";
-if (!fs.existsSync(dataDir)) {
-    fs.mkdirSync(dataDir);
-}
-
 const db = new Database("/var/data/db.sqlite");
 
 db.exec(`

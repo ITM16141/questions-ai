@@ -25,7 +25,7 @@ function SharePage() {
             <div><strong>出題範囲：</strong>{entry.includeMathThree ? "数学I・II・III・A・B・C" : "数学I・II・A・B・C"}</div>
             <div><strong>日時：</strong>{new Date(entry.timestamp).toLocaleString()}</div>
             <div><strong>閲覧数：</strong>{entry.views}</div>
-            <div><strong>タグ：</strong>{entry.tags.join(", ")}</div>
+            <div><strong>タグ：</strong>{entry.tags?.join?.(", ") || ""}</div>
 
             <h2>問題</h2>
             <pre><MarkdownRenderer content={entry.problem} /></pre>

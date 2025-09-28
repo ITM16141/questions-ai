@@ -67,7 +67,7 @@ const HistoryPage: React.FC = () => {
                 className="tag-search"
             />
 
-            {sortedHistory.map((entry, idx) => (
+            {history.map((entry, idx) => (
                 <div key={idx} className="history-card">
                     <div><strong>難易度：</strong>{entry.difficulty}</div>
                     <div><strong>出題範囲：</strong>{entry.includeMathThree ? "数学I・II・III・A・B・C" : "数学I・II・A・B・C"}</div>

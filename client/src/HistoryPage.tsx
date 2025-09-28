@@ -1,3 +1,4 @@
+import "./App.css";
 import React, { useEffect, useState } from "react";
 import {fetchHistory, updateTags, updatePinned, updateOpened} from "./api";
 import Tabs from "./components/Tabs";
@@ -116,11 +117,15 @@ const HistoryPage: React.FC = () => {
 
                     <details>
                         <summary>📘 問題を見る</summary>
-                        <pre><MarkdownRenderer content={entry.problem} /></pre>
+                        <div className="problem-block">
+                            <pre><MarkdownRenderer content={entry.problem} /></pre>
+                        </div>
                     </details>
                     <details>
                         <summary>🧠 解答を見る</summary>
-                        <pre><MarkdownRenderer content={entry.solution} /></pre>
+                        <div className="solution-block">
+                            <pre><MarkdownRenderer content={entry.solution} /></pre>
+                        </div>
                     </details>
                 </div>
             ))}

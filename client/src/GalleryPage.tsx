@@ -1,3 +1,4 @@
+import "./App.css";
 import React, { useEffect, useState } from "react";
 import { fetchGallery } from "./api";
 import MarkdownRenderer from "./components/MarkdownRenderer";
@@ -57,12 +58,16 @@ const GalleryPage: React.FC = () => {
                     <div><strong>タグ：</strong>{entry.tags.join(", ")}</div>
                     <details>
                         <summary>📘 問題を見る</summary>
-                        <pre><MarkdownRenderer content={entry.problem} /></pre>
+                        <div className="problem-block">
+                            <pre><MarkdownRenderer content={entry.problem} /></pre>
+                        </div>
                     </details>
                     <details>
                         <summary>🧠 解答を見る</summary>
-                        <pre><MarkdownRenderer content={entry.solution} /></pre>
-                    </details>
+                        <div className="solution-block">
+                            <pre><MarkdownRenderer content={entry.solution} /></pre>
+                        </div>
+                        </details>
                 </div>
             ))}
         </div>

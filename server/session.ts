@@ -1,7 +1,6 @@
 import {ChatSession, GoogleGenerativeAI} from "@google/generative-ai";
 import path from "path";
 import fs from "fs";
-import { randomUUID } from "crypto";
 import db from "./db";
 
 const sessions = new Map<string, ChatSession>();
@@ -39,8 +38,9 @@ export async function handleSession(params: {
     userId: string;
     difficulty: string;
     includeMathThree: boolean;
+    sessionId: string;
 }) {
-    const { userId, difficulty, includeMathThree} = params;
+    const { userId, difficulty, includeMathThree, sessionId } = params;
     const uid = String(userId);
 
     let chat = getSessionForUser(uid);
@@ -59,8 +59,6 @@ export async function handleSession(params: {
         : [fullText, "（解答・検証部分が見つかりませんでした）"];
     const problem = problemPart.trim();
     const solution = restPart.trim();
-
-    const id = randomUUID();
     const timestamp = Date.now();
 
     db.prepare(`
@@ -77,7 +75,7 @@ export async function handleSession(params: {
             opened
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `).run(
-        id,
+        sessionId,
         uid,
         difficulty,
         includeMathThree ? 1 : 0,
@@ -90,7 +88,7 @@ export async function handleSession(params: {
     );
 
     return {
-        id,
+        sessionId,
         problem: problem,
         solution: solution
     };

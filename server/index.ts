@@ -42,7 +42,8 @@ app.get("/api/session", async (req, res) => {
     handleSession({
         userId: String(userId),
         difficulty: String(difficulty),
-        includeMathThree: includeMathThree === "true"
+        includeMathThree: includeMathThree === "true",
+        sessionId: sessionId as string
     }).then(result => {
         db.prepare(`
             UPDATE sessions SET status = ?, problem = ?, solution = ?

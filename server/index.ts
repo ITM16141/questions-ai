@@ -66,7 +66,7 @@ app.get("/api/session", async (req, res) => {
             Date.now(),
             "",
             0,
-            0,
+            1,
             0
         );
     });
@@ -160,6 +160,17 @@ app.get("/api/gallery", (req, res) => {
     });
 
     res.json(parsed);
+});
+
+app.get("/api/share/:id", (req, res) => {
+    const { id } = req.params;
+    const row = db.prepare(`
+        SELECT problem, solution FROM history
+        WHERE id = ?
+    `).get(id);
+
+    if (!row) return res.status(404).json({ error: "not found" });
+    res.json(row);
 });
 
 const PORT = process.env.PORT || 4000;

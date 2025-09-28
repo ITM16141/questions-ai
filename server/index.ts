@@ -51,7 +51,7 @@ app.get("/api/session", async (req, res) => {
         `).run("done", result.problem, result.solution, sessionId);
 
         db.prepare(`
-            INSERT INTO history (
+            INSERT OR IGNORE INTO history (
                 id, userId, difficulty, includeMathThree,
                 problem, solution, timestamp,
                 tags, pinned, opened, views

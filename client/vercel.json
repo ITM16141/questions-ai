@@ -3,6 +3,10 @@
     {
       "source": "/api/(.*)",
       "destination": "https://questions-ai-hxms.onrender.com/api/$1"
+    },
+    {
+      "source": "/share/:id",
+      "destination": "/"
     }
   ]
 }

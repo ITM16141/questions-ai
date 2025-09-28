@@ -87,7 +87,7 @@ const App: React.FC = () => {
     };
 
     return (
-        <div>
+        <div className="app">
             <Tabs />
             <h1>🧠 数学問題ジェネレーター</h1>
 

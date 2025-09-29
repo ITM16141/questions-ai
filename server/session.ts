@@ -61,7 +61,7 @@ export async function handleSession(params: {
     const solution = restPart.trim();
     const timestamp = Date.now();
 
-    db.from("history").insert([
+    const { error } = await db.from("history").insert([
         {
             id: sessionId,
             userId: userId,
@@ -76,6 +76,8 @@ export async function handleSession(params: {
             views: 0
         }
     ]);
+
+    if(error) console.error("Supabase error:", error);
 
     return {
         sessionId,

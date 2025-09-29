@@ -14,26 +14,30 @@ app.use(cors({
 app.get("/api/session", async (req, res) => {
     const { userId, difficulty, includeMathThree, sessionId } = req.query;
 
-    db.from("sessions").insert({
+    const { error } = await db.from("sessions").insert({
         id: sessionId,
         status: "pending",
         problem: null,
         solution: null
     });
 
+    if(error) console.error("Supabase error:", error);
+
     handleSession({
         userId: String(userId),
         difficulty: String(difficulty),
         includeMathThree: Boolean(includeMathThree),
         sessionId: String(sessionId)
-    }).then(result => {
-        db.from("sessions").update({
+    }).then(async result => {
+        const { error: error1 } = await db.from("sessions").update({
             status: "done",
             problem: result.problem,
             solution: result.solution,
         }).eq("id", String(sessionId));
 
-        db.from("history").insert({
+        if(error1) console.error("Supabase error:", error1);
+
+        const { error: error2 } = await db.from("history").insert({
             id: sessionId,
             userId: String(userId),
             difficulty: String(difficulty),
@@ -46,87 +50,99 @@ app.get("/api/session", async (req, res) => {
             opened: true,
             views: 0
         });
+
+        if(error2) console.error("Supabase error:", error2);
     });
 
     res.json({ sessionId });
 });
 
-app.post("/api/session/cancel", (req, res) => {
+app.post("/api/session/cancel", async (req, res) => {
     const { sessionId } = req.body;
 
-    db.from("sessions").update({
+    const { error } = await db.from("sessions").update({
         status: "cancelled"
     }).eq("id", String(sessionId));
+
+    if(error) console.error("Supabase error:", error);
 
     res.json({ success: true });
 });
 
 app.get("/api/session/status", async (req, res) => {
     const { sessionId } = req.query;
-    const { data } = await db.from("sessions").select("status, problem, solution").eq("id", String(sessionId)).single();
+    const { data, error } = await db.from("sessions").select("status, problem, solution").eq("id", String(sessionId)).single();
 
-    if (!data) {
-        return res.status(404).json({ error: "not found" });
-    }
+    if(error) console.error("Supabase error:", error);
 
     res.json(data);
 });
-
 
 app.get("/api/history", async (req, res) => {
     const { userId } = req.query;
-    const { data } = await db.from("history").select("*").eq("userId", userId).order("timestamp", {ascending: false});
+    const { data, error } = await db.from("history").select("*").eq("userId", userId).order("timestamp", {ascending: false});
+
+    if(error) console.error("Supabase error:", error);
 
     res.json(data);
 });
 
-app.patch("/api/history/:id/tags", (req, res) => {
+app.patch("/api/history/:id/tags", async (req, res) => {
     const { id } = req.params;
     const { tags } = req.body;
     if (!Array.isArray(tags)) return res.status(400).json({ error: "tags must be array" });
 
-    db.from("history").update({
+    const { error } = await db.from("history").update({
         tags: tags
     }).eq("id", id);
+
+    if(error) console.error("Supabase error:", error);
 
     res.json({ success: true, tags });
 });
 
-app.patch("/api/history/:id/pin", (req, res) => {
+app.patch("/api/history/:id/pin", async (req, res) => {
     const { id } = req.params;
     const { pinned } = req.body;
     if (typeof pinned !== "boolean") return res.status(400).json({ error: "pinned must be boolean" });
 
-    db.from("history").update({
+    const { error } = await db.from("history").update({
         pinned: pinned
     }).eq("id", id);
+
+    if(error) console.error("Supabase error:", error);
 
     res.json({ success: true, pinned });
 });
 
-app.patch("/api/history/:id/opened", (req, res) => {
+app.patch("/api/history/:id/opened", async (req, res) => {
     const { id } = req.params;
     const { opened: isOpened } = req.body;
     if (typeof isOpened !== "boolean") return res.status(400).json({ error: "opened must be boolean" });
 
-    db.from("history").update({
+    const { error } = await db.from("history").update({
         opened: isOpened
     }).eq("id", id);
+
+    if(error) console.error("Supabase error:", error);
 
     res.json({ success: true, opened: isOpened });
 });
 
 app.get("/api/gallery", async (req, res) => {
-    const { data } = await db.from("history").select("*").eq("opened", true).order("timestamp", {ascending: false});
+    const { data, error } = await db.from("history").select("*").eq("opened", true).order("timestamp", {ascending: false});
+
+    if(error) console.error("Supabase error:", error);
 
     res.json(data);
 });
 
-app.get("/api/share/:id", (req, res) => {
+app.get("/api/share/:id", async (req, res) => {
     const { id } = req.params;
-    const data = db.from("history").select("problem, solution").eq("id", id);
+    const { data, error } = await db.from("history").select("problem, solution").eq("id", id);
 
-    if (!data) return res.status(404).json({ error: "not found" });
+    if(error) console.error("Supabase error:", error);
+
     res.json(data);
 });
 

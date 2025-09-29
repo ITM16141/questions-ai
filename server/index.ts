@@ -71,7 +71,7 @@ app.post("/api/session/cancel", async (req, res) => {
 
 app.get("/api/session/status", async (req, res) => {
     const { sessionId } = req.query;
-    const { data, error } = await db.from("sessions").select("status, problem, solution").eq("id", String(sessionId)).single();
+    const { data, error } = await db.from("sessions").select("status, problem, solution").eq("id", String(sessionId)).maybeSingle();
 
     if(error) console.error("Supabase error:", error);
 

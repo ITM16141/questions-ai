@@ -26,7 +26,7 @@ app.get("/api/session", async (req, res) => {
     handleSession({
         userId: String(userId),
         difficulty: String(difficulty),
-        includeMathThree: Boolean(includeMathThree),
+        includeMathThree: String(includeMathThree).toLowerCase() === 'true',
         sessionId: String(sessionId)
     }).then(async result => {
         const { error: error1 } = await db.from("sessions").update({

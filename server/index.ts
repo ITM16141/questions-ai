@@ -44,7 +44,7 @@ app.get("/api/session", async (req, res) => {
             includeMathThree: includeMathThree,
             problem: result.problem,
             solution: result.solution,
-            timestamp: Date.now(),
+            timestamp: new Date(Date.now()).toISOString(),
             tags: [""],
             pinned: false,
             opened: true,

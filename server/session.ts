@@ -59,7 +59,7 @@ export async function handleSession(params: {
         : [fullText, "（解答・検証部分が見つかりませんでした）"];
     const problem = problemPart.trim();
     const solution = restPart.trim();
-    const timestamp = Date.now();
+    const timestamp = new Date(Date.now()).toISOString();
 
     const { error } = await db.from("history").insert([
         {

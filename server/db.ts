@@ -1,32 +1,8 @@
-import Database from "better-sqlite3";
-import path from "path";
-import fs from "fs";
+import { createClient } from "@supabase/supabase-js";
 
-const db = new Database("/var/data/db.sqlite");
-
-db.exec(`
-     CREATE TABLE IF NOT EXISTS history (
-        id TEXT PRIMARY KEY,
-        userId TEXT,
-        difficulty TEXT,
-        includeMathThree INTEGER,
-        problem TEXT,
-        solution TEXT,
-        timestamp INTEGER,
-        tags TEXT,
-        pinned INTEGER,
-        opened INTEGER,
-        views INTEGER
-    )
-`);
-
-db.exec(`
-    CREATE TABLE IF NOT EXISTS sessions (
-        id TEXT PRIMARY KEY,
-        status TEXT,
-        problem TEXT,
-        solution TEXT
-    )
-`);
+const db = createClient(
+    process.env.SUBABASE_URL!,
+    process.env.SUBABASE_KEY!,
+);
 
 export default db;

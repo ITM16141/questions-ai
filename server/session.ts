@@ -61,31 +61,21 @@ export async function handleSession(params: {
     const solution = restPart.trim();
     const timestamp = Date.now();
 
-    db.prepare(`
-        INSERT INTO history (
-            id,
-            userId,
-            difficulty,
-            includeMathThree,
-            problem,
-            solution,
-            timestamp,
-            tags,
-            pinned,
-            opened
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `).run(
-        sessionId,
-        uid,
-        difficulty,
-        includeMathThree ? 1 : 0,
-        problem,
-        solution,
-        timestamp,
-        JSON.stringify([]),
-        0,
-        0
-    );
+    db.from("history").insert([
+        {
+            id: sessionId,
+            userId: userId,
+            difficulty: difficulty,
+            includeMathThree: includeMathThree,
+            problem: problem,
+            solution: solution,
+            timestamp: timestamp,
+            tags: [],
+            pinned: false,
+            opened: true,
+            views: 0
+        }
+    ]);
 
     return {
         sessionId,

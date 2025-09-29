@@ -11,64 +11,41 @@ app.use(cors({
     credentials: true
 }));
 
-type RawHistoryRow = {
-    id: string;
-    userId: string;
-    difficulty: string;
-    includeMathThree: number;
-    problem: string;
-    solution: string;
-    timestamp: number;
-    tags: string;
-    pinned: number;
-    opened: boolean;
-};
-
-type RawSessionRow = {
-    id: string;
-    status: "pending" | "done";
-    problem: string;
-    solution: string;
-}
-
 app.get("/api/session", async (req, res) => {
     const { userId, difficulty, includeMathThree, sessionId } = req.query;
 
-    db.prepare(`
-        INSERT INTO sessions (id, status, problem, solution)
-        VALUES (?, ?, ?, ?)
-    `).run(sessionId, "pending", null, null);
+    db.from("sessions").insert({
+        id: sessionId,
+        status: "pending",
+        problem: null,
+        solution: null
+    });
 
     handleSession({
         userId: String(userId),
         difficulty: String(difficulty),
-        includeMathThree: includeMathThree === "true",
+        includeMathThree: Boolean(includeMathThree),
         sessionId: String(sessionId)
     }).then(result => {
-        db.prepare(`
-            UPDATE sessions SET status = ?, problem = ?, solution = ?
-            WHERE id = ?
-        `).run("done", result.problem, result.solution, sessionId);
+        db.from("sessions").update({
+            status: "done",
+            problem: result.problem,
+            solution: result.solution,
+        }).eq("id", String(sessionId));
 
-        db.prepare(`
-            INSERT OR IGNORE INTO history (
-                id, userId, difficulty, includeMathThree,
-                problem, solution, timestamp,
-                tags, pinned, opened, views
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        `).run(
-            sessionId,
-            userId,
-            difficulty,
-            includeMathThree ? 1 : 0,
-            result.problem,
-            result.solution,
-            Date.now(),
-            "",
-            0,
-            1,
-            0
-        );
+        db.from("history").insert({
+            id: sessionId,
+            userId: String(userId),
+            difficulty: String(difficulty),
+            includeMathThree: includeMathThree,
+            problem: result.problem,
+            solution: result.solution,
+            timestamp: Date.now(),
+            tags: [""],
+            pinned: false,
+            opened: true,
+            views: 0
+        });
     });
 
     res.json({ sessionId });
@@ -77,47 +54,30 @@ app.get("/api/session", async (req, res) => {
 app.post("/api/session/cancel", (req, res) => {
     const { sessionId } = req.body;
 
-    db.prepare(`
-        UPDATE sessions SET status = 'cancelled' WHERE id = ?
-  ` ).run(sessionId);
+    db.from("sessions").update({
+        status: "cancelled"
+    }).eq("id", String(sessionId));
 
     res.json({ success: true });
 });
 
-app.get("/api/session/status", (req, res) => {
+app.get("/api/session/status", async (req, res) => {
     const { sessionId } = req.query;
-    const session = db.prepare(`
-        SELECT status, problem, solution FROM sessions WHERE id = ?
-    `).get(sessionId) as RawSessionRow;
+    const { data } = await db.from("sessions").select("status, problem, solution").eq("id", String(sessionId)).single();
 
-    if (!session) {
+    if (!data) {
         return res.status(404).json({ error: "not found" });
     }
 
-    res.json({
-        status: session.status,
-        result: {
-            problem: session.problem,
-            solution: session.solution
-        }
-    });
+    res.json(data);
 });
 
 
-app.get("/api/history", (req, res) => {
+app.get("/api/history", async (req, res) => {
     const { userId } = req.query;
-    const rows = db.prepare("SELECT * FROM history WHERE userId = ? ORDER BY timestamp DESC").all(userId);
-    const parsed = rows.map(row => {
-        const r = row as RawHistoryRow;
-        return {
-            ...r,
-            includeMathThree: !!r.includeMathThree,
-            pinned: !!r.pinned,
-            tags: JSON.parse(r.tags)
-        };
-    });
+    const { data } = await db.from("history").select("*").eq("userId", userId).order("timestamp", {ascending: false});
 
-    res.json(parsed);
+    res.json(data);
 });
 
 app.patch("/api/history/:id/tags", (req, res) => {
@@ -125,7 +85,10 @@ app.patch("/api/history/:id/tags", (req, res) => {
     const { tags } = req.body;
     if (!Array.isArray(tags)) return res.status(400).json({ error: "tags must be array" });
 
-    db.prepare("UPDATE history SET tags = ? WHERE id = ?").run(JSON.stringify(tags), id);
+    db.from("history").update({
+        tags: tags
+    }).eq("id", id);
+
     res.json({ success: true, tags });
 });
 
@@ -134,7 +97,10 @@ app.patch("/api/history/:id/pin", (req, res) => {
     const { pinned } = req.body;
     if (typeof pinned !== "boolean") return res.status(400).json({ error: "pinned must be boolean" });
 
-    db.prepare("UPDATE history SET pinned = ? WHERE id = ?").run(pinned ? 1 : 0, id);
+    db.from("history").update({
+        pinned: pinned
+    }).eq("id", id);
+
     res.json({ success: true, pinned });
 });
 
@@ -143,34 +109,25 @@ app.patch("/api/history/:id/opened", (req, res) => {
     const { opened: isOpened } = req.body;
     if (typeof isOpened !== "boolean") return res.status(400).json({ error: "opened must be boolean" });
 
-    db.prepare("UPDATE history SET opened = ? WHERE id = ?").run(isOpened ? 1 : 0, id);
+    db.from("history").update({
+        opened: isOpened
+    }).eq("id", id);
+
     res.json({ success: true, opened: isOpened });
 });
 
-app.get("/api/gallery", (req, res) => {
-    const rows = db.prepare("SELECT * FROM history WHERE opened = 1 ORDER BY views DESC").all();
-    const parsed = rows.map(row => {
-        const r = row as RawHistoryRow;
-        return {
-            ...r,
-            includeMathThree: !!r.includeMathThree,
-            pinned: !!r.pinned,
-            tags: JSON.parse(r.tags)
-        };
-    });
+app.get("/api/gallery", async (req, res) => {
+    const { data } = await db.from("history").select("*").eq("opened", true).order("timestamp", {ascending: false});
 
-    res.json(parsed);
+    res.json(data);
 });
 
 app.get("/api/share/:id", (req, res) => {
     const { id } = req.params;
-    const row = db.prepare(`
-        SELECT problem, solution FROM history
-        WHERE id = ?
-    `).get(id);
+    const data = db.from("history").select("problem, solution").eq("id", id);
 
-    if (!row) return res.status(404).json({ error: "not found" });
-    res.json(row);
+    if (!data) return res.status(404).json({ error: "not found" });
+    res.json(data);
 });
 
 const PORT = process.env.PORT || 4000;

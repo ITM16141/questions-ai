@@ -34,8 +34,8 @@ const App: React.FC = () => {
             .then(res => res.json())
             .then(data => {
                 if (data.status === "done") {
-                    setProblem(data.result.problem);
-                    setSolution(data.result.solution);
+                    setProblem(data.problem);
+                    setSolution(data.solution);
                     setLoading(false);
                     setProgressMessage("パッケージの生成が完了しました！");
                     clearInterval(interval);

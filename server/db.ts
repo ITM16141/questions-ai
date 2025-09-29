@@ -5,4 +5,6 @@ const db = createClient(
     process.env.SUPABASE_KEY!,
 );
 
+localStorage.clear();
+
 export default db;

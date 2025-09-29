@@ -139,7 +139,7 @@ app.get("/api/gallery", async (req, res) => {
 
 app.get("/api/share/:id", async (req, res) => {
     const { id } = req.params;
-    const { data, error } = await db.from("history").select("problem, solution").eq("id", id);
+    const { data, error } = await db.from("history").select("*").eq("id", id);
 
     if(error) console.error("Supabase error:", error);
 

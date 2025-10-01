@@ -30,14 +30,14 @@ function App(){
         fetch("/api/me", {
             headers: { Authorization: `Bearer ${token}` },
         })
-            .then((res) => res.json())
-            .then((data) => {
-                if (data.userId) setUserId(data.userId);
-                else {
-                    removeToken();
-                    window.location.href = "/login";
-                }
-            });
+        .then((res) => res.json())
+        .then((data) => {
+            if (data.userId) setUserId(data.userId);
+            else {
+                removeToken();
+                navigate("/login");
+            }
+        });
     }, []);
 
     useEffect(() => {

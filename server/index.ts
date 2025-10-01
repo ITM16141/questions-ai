@@ -13,6 +13,23 @@ app.use(cors({
     credentials: true
 }));
 
+app.get("/api/me", async (req, res) => {
+    const authHeader = req.headers.authorization;
+    const token = authHeader?.split(" ")[1];
+
+    if (!token) {
+        return res.status(401).json({ error: "トークンがありません" });
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {userId: string};
+        res.json({ userId: decoded.userId });
+    } catch (err) {
+        res.status(401).json({ error: "トークンが無効です" });
+    }
+
+});
+
 app.get("/api/session", async (req, res) => {
     const { userId, difficulty, includeMathThree, sessionId } = req.query;
 

@@ -2,10 +2,8 @@ import "./App.css";
 import { useState } from "react";
 import { saveToken } from "../lib/auth";
 import Tabs from "../components/Tabs";
-import {useNavigate} from "react-router-dom";
 
 export default function Login() {
-    const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -25,10 +23,6 @@ export default function Login() {
         }
     };
 
-    const handleRegister = async () => {
-        navigate("/register");
-    };
-
     return (
         <div className="login-page">
             <Tabs />
@@ -36,7 +30,7 @@ export default function Login() {
             <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="メール" />
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="パスワード" />
             <button onClick={handleLogin}>ログイン</button>
-            <button onClick={handleRegister}>アカウントを作成</button>
+            <a href="/register">アカウントを作成</a>
         </div>
     );
 }

@@ -7,8 +7,10 @@ import RangeSelector from "../components/RangeSelector";
 import MarkdownRenderer from "../components/MarkdownRenderer";
 import Tabs from "../components/Tabs"
 import {getToken, removeToken} from "../lib/auth";
+import {useNavigate} from "react-router-dom";
 
 function App(){
+    const navigate = useNavigate();
     const [userId, setUserId] = useState<string | null>(null);
     const [difficulty, setDifficulty] = useState("標準レベル");
     const [includeMathThree, setIncludeMathThree] = useState(false);
@@ -21,7 +23,7 @@ function App(){
     useEffect(() => {
         const token = getToken();
         if (!token) {
-            window.location.href = "/api/login";
+            navigate("/login");
             return;
         }
 

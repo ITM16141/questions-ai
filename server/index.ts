@@ -156,7 +156,7 @@ app.post("/api/register", async (req, res) => {
         { email, password_hash },
     ]);
 
-    if (error) return res.status(500).json({ error: error.message });
+    if(error) console.error("Supabase error:", error);
     res.json({ success: true });
 });
 
@@ -171,10 +171,10 @@ app.post("/api/login", async (req, res) => {
 
     if(error) console.error("Supabase error:", error);
 
-    const match = await bcrypt.compare(password, data.user.password_hash);
+    const match = await bcrypt.compare(password, data.password_hash);
     if (!match) return res.status(401).json({ error: "パスワード不一致" });
 
-    const token = jwt.sign({ userId: data.user.id }, process.env.JWT_SECRET!, {
+    const token = jwt.sign({ userId: data.id }, process.env.JWT_SECRET!, {
         expiresIn: "7d",
     });
 

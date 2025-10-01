@@ -19,7 +19,7 @@ export default function Login() {
         const data = await res.json();
         if (res.ok && data.token) {
             saveToken(data.token);
-            window.location.href = "/home";
+            navigate("/");
         } else {
             alert("ログイン失敗: " + data.error);
         }

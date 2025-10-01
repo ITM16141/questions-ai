@@ -11,7 +11,7 @@ import {useNavigate} from "react-router-dom";
 
 function App(){
     const navigate = useNavigate();
-    const [userId, setUserId] = useState<string | null>(null);
+    const [userId, setUserId] = useState(localStorage.getItem("userId"));
     const [difficulty, setDifficulty] = useState("標準レベル");
     const [includeMathThree, setIncludeMathThree] = useState(false);
     const [problem, setProblem] = useState("");
@@ -32,8 +32,10 @@ function App(){
         })
         .then((res) => res.json())
         .then((data) => {
-            if (data.userId) setUserId(data.userId);
-            else {
+            if (data.userId){
+                setUserId(data.userId);
+                localStorage.setItem("userId", data.userId);
+            } else {
                 removeToken();
                 navigate("/login");
             }

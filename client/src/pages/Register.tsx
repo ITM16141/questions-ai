@@ -1,8 +1,10 @@
 import "./App.css";
 import {useState} from "react";
 import Tabs from "../components/Tabs";
+import {useNavigate} from "react-router-dom";
 
 export default function Register() {
+    const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -16,7 +18,7 @@ export default function Register() {
         const data = await res.json();
         if (res.ok) {
             alert("登録成功！ログインしてください");
-            window.location.href = "/login";
+            navigate("/login");
         } else {
             alert("登録失敗: " + data.error);
         }

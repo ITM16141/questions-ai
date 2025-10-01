@@ -5,7 +5,7 @@ export type HistoryEntry = {
     includeMathThree: boolean;
     problem: string;
     solution: string;
-    timestamp: number;
+    created_at: number;
     tags: string[];
     pinned: boolean;
     opened: boolean;

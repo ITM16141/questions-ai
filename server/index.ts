@@ -44,7 +44,7 @@ app.get("/api/session", async (req, res) => {
             includeMathThree: includeMathThree,
             problem: result.problem,
             solution: result.solution,
-            timestamp: new Date(Date.now()).toISOString(),
+            created_at: new Date(Date.now()).toISOString(),
             tags: [""],
             pinned: false,
             opened: true,
@@ -80,7 +80,7 @@ app.get("/api/session/status", async (req, res) => {
 
 app.get("/api/history", async (req, res) => {
     const { userId } = req.query;
-    const { data, error } = await db.from("history").select("*").eq("userId", userId).order("timestamp", {ascending: false});
+    const { data, error } = await db.from("history").select("*").eq("userId", userId).order("created_at", {ascending: false});
 
     if(error) console.error("Supabase error:", error);
 
@@ -130,7 +130,7 @@ app.patch("/api/history/:id/opened", async (req, res) => {
 });
 
 app.get("/api/gallery", async (req, res) => {
-    const { data, error } = await db.from("history").select("*").eq("opened", true).order("timestamp", {ascending: false});
+    const { data, error } = await db.from("history").select("*").eq("opened", true).order("created_at", {ascending: false});
 
     if(error) console.error("Supabase error:", error);
 

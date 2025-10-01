@@ -53,7 +53,7 @@ function HistoryPage(){
     const sortedHistory = [...filteredHistory].sort((a, b) => {
         if (a.pinned && !b.pinned) return -1;
         if (!a.pinned && b.pinned) return 1;
-        return b.timestamp - a.timestamp;
+        return b.created_at - a.created_at;
     });
 
     return (
@@ -72,7 +72,7 @@ function HistoryPage(){
                 <div key={idx} className="history-card">
                     <div><strong>難易度：</strong>{entry.difficulty}</div>
                     <div><strong>出題範囲：</strong>{entry.includeMathThree ? "数学I・II・III・A・B・C" : "数学I・II・A・B・C"}</div>
-                    <div><strong>日時：</strong>{new Date(entry.timestamp).toLocaleString()}</div>
+                    <div><strong>日時：</strong>{new Date(entry.created_at).toLocaleString()}</div>
                     <div><strong>閲覧数：</strong>{entry.views}</div>
                     <div><strong>タグ：</strong>{entry.tags.join(", ")}</div>
 

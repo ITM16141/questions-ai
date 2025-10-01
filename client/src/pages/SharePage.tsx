@@ -24,7 +24,7 @@ function SharePage() {
             <h1>📘 共有されたパッケージ</h1>
             <div><strong>難易度：</strong>{entry.difficulty}</div>
             <div><strong>出題範囲：</strong>{entry.includeMathThree ? "数学I・II・III・A・B・C" : "数学I・II・A・B・C"}</div>
-            <div><strong>日時：</strong>{new Date(entry.timestamp).toLocaleString()}</div>
+            <div><strong>日時：</strong>{new Date(entry.created_at).toLocaleString()}</div>
             <div><strong>閲覧数：</strong>{entry.views}</div>
             <div><strong>タグ：</strong>{entry.tags?.join?.(", ") || ""}</div>
 

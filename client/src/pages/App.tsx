@@ -1,14 +1,14 @@
 import "./App.css";
 import React, { useEffect, useState, useContext } from "react";
 import { v4 as uuid } from "uuid";
-import { SessionContext } from "./context/SessionContext";
-import DifficultySelector from "./components/DifficultySelector";
-import RangeSelector from "./components/RangeSelector";
-import MarkdownRenderer from "./components/MarkdownRenderer";
-import Tabs from "./components/Tabs";
+import { SessionContext } from "../context/SessionContext";
+import DifficultySelector from "../components/DifficultySelector";
+import RangeSelector from "../components/RangeSelector";
+import MarkdownRenderer from "../components/MarkdownRenderer";
+import Tabs from "../components/Tabs"
 
-const App: React.FC = () => {
-    const userId = localStorage.getItem("userId") as string;
+function App(){
+    const [userId, setUserId] = useState(localStorage.getItem("userId") as string);
     const [difficulty, setDifficulty] = useState("標準レベル");
     const [includeMathThree, setIncludeMathThree] = useState(false);
     const [problem, setProblem] = useState("");
@@ -132,6 +132,6 @@ const App: React.FC = () => {
             )}
         </div>
     );
-};
+}
 
 export default App;

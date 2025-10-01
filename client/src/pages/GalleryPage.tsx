@@ -1,12 +1,12 @@
 import "./App.css";
 import React, { useEffect, useState } from "react";
-import { fetchGallery } from "./api";
-import MarkdownRenderer from "./components/MarkdownRenderer";
-import Tabs from "./components/Tabs";
-import {HistoryEntry} from "./types";
+import { fetchGallery } from "../api";
+import MarkdownRenderer from "../components/MarkdownRenderer";
+import Tabs from "../components/Tabs";
+import {HistoryEntry} from "../types";
 import {useNavigate} from "react-router-dom";
 
-const GalleryPage: React.FC = () => {
+function GalleryPage(){
     const [entries, setEntries] = useState<HistoryEntry[]>([]);
     const [searchTag, setSearchTag] = useState("");
     const [inputId, setInputId] = useState("");
@@ -72,6 +72,6 @@ const GalleryPage: React.FC = () => {
             ))}
         </div>
     );
-};
+}
 
 export default GalleryPage;

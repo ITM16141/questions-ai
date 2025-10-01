@@ -1,11 +1,11 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { SessionProvider } from "./context/SessionContext";
-import App from "./App";
-import HistoryPage from "./HistoryPage";
-import GalleryPage from "./GalleryPage";
+import App from "./pages/App";
+import HistoryPage from "./pages/HistoryPage";
+import GalleryPage from "./pages/GalleryPage";
 import ReactDOM from "react-dom/client";
 import "./styles.css";
-import SharePage from "./SharePage";
+import SharePage from "./pages/SharePage";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
     <SessionProvider>

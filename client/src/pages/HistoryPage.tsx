@@ -1,11 +1,11 @@
 import "./App.css";
 import React, { useEffect, useState } from "react";
-import {fetchHistory, updateTags, updatePinned, updateOpened} from "./api";
-import Tabs from "./components/Tabs";
-import {HistoryEntry} from "./types";
-import MarkdownRenderer from "./components/MarkdownRenderer";
+import {fetchHistory, updateTags, updatePinned, updateOpened} from "../api";
+import Tabs from "../components/Tabs";
+import {HistoryEntry} from "../types";
+import MarkdownRenderer from "../components/MarkdownRenderer";
 
-const HistoryPage: React.FC = () => {
+function HistoryPage(){
     const [history, setHistory] = useState<HistoryEntry[]>([]);
     const [tagInputs, setTagInputs] = useState<Record<number, string>>({});
     const [searchTag, setSearchTag] = useState("");
@@ -131,6 +131,6 @@ const HistoryPage: React.FC = () => {
             ))}
         </div>
     );
-};
+}
 
 export default HistoryPage;

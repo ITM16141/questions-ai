@@ -36,7 +36,7 @@ export default function Login() {
             <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="メール" />
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="パスワード" />
             <button onClick={handleLogin}>ログイン</button>
-            <button onClick={handleRegister}>アカウントを作成</button>
+            <link onClick={handleRegister}>アカウントを作成</link>
         </div>
     );
 }

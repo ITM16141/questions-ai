@@ -71,7 +71,9 @@ body {
 .app,
 .history-page,
 .gallery-page,
-.share-page {
+.share-page,
+.login-page,
+.register-page {
     padding: 1rem;
     max-width: 600px;
     margin: auto;

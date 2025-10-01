@@ -24,3 +24,16 @@
     position: relative;
     right: 0;
 }
+
+.account a {
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    background: #eee;
+    color: #333;
+}
+
+.account a.active {
+    background: #333;
+    color: #fff;
+}

@@ -1,5 +1,6 @@
 import "./App.css";
 import {useState} from "react";
+import Tabs from "../components/Tabs";
 
 export default function Register() {
     const [email, setEmail] = useState("");
@@ -22,7 +23,8 @@ export default function Register() {
     };
 
     return (
-        <div>
+        <div className="register-page">
+            <Tabs />
             <h1>新規登録</h1>
             <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="メール" />
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="パスワード" />

@@ -1,6 +1,7 @@
 import "./App.css";
 import { useState } from "react";
 import { saveToken } from "../lib/auth";
+import Tabs from "../components/Tabs";
 
 export default function Login() {
     const [email, setEmail] = useState("");
@@ -23,7 +24,8 @@ export default function Login() {
     };
 
     return (
-        <div>
+        <div className="login-page">
+            <Tabs />
             <h1>ログイン</h1>
             <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="メール" />
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="パスワード" />

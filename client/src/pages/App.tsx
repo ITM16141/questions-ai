@@ -21,7 +21,7 @@ function App(){
     useEffect(() => {
         const token = getToken();
         if (!token) {
-            window.location.href = "/login";
+            window.location.href = "/api/login";
             return;
         }
 

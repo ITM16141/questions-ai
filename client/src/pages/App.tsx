@@ -6,9 +6,10 @@ import DifficultySelector from "../components/DifficultySelector";
 import RangeSelector from "../components/RangeSelector";
 import MarkdownRenderer from "../components/MarkdownRenderer";
 import Tabs from "../components/Tabs"
+import {getToken, removeToken} from "../lib/auth";
 
 function App(){
-    const [userId, setUserId] = useState(localStorage.getItem("userId") as string);
+    const [userId, setUserId] = useState<string | null>(null);
     const [difficulty, setDifficulty] = useState("標準レベル");
     const [includeMathThree, setIncludeMathThree] = useState(false);
     const [problem, setProblem] = useState("");
@@ -16,6 +17,26 @@ function App(){
     const [sessionId, setSessionId] = useState<string | null>(null);
     const [showSolution, setShowSolution] = useState(false);
     const { loading, setLoading, progressMessage, setProgressMessage } = useContext(SessionContext);
+
+    useEffect(() => {
+        const token = getToken();
+        if (!token) {
+            window.location.href = "/login";
+            return;
+        }
+
+        fetch("/api/me", {
+            headers: { Authorization: `Bearer ${token}` },
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.userId) setUserId(data.userId);
+                else {
+                    removeToken();
+                    window.location.href = "/login";
+                }
+            });
+    }, []);
 
     useEffect(() => {
         const saved = localStorage.getItem("activeSessionId");

@@ -1,3 +1,5 @@
+import * as bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import express from "express";
 import cors from "cors";
 import { handleSession } from "./session";
@@ -144,6 +146,39 @@ app.get("/api/share/:id", async (req, res) => {
     if(error) console.error("Supabase error:", error);
 
     res.json(data);
+});
+
+app.post("/api/register", async (req, res) => {
+    const { email, password } = req.body;
+    const password_hash = await bcrypt.hash(password, 10);
+
+    const { error } = await db.from("users").insert([
+        { email, password_hash },
+    ]);
+
+    if (error) return res.status(500).json({ error: error.message });
+    res.json({ success: true });
+});
+
+app.post("/api/login", async (req, res) => {
+    const { email, password } = req.body;
+
+    const { data, error } = await db
+        .from("users")
+        .select("*")
+        .eq("email", email)
+        .single();
+
+    if(error) console.error("Supabase error:", error);
+
+    const match = await bcrypt.compare(password, data.user.password_hash);
+    if (!match) return res.status(401).json({ error: "パスワード不一致" });
+
+    const token = jwt.sign({ userId: data.user.id }, process.env.JWT_SECRET!, {
+        expiresIn: "7d",
+    });
+
+    res.json({ token });
 });
 
 const PORT = process.env.PORT || 4000;

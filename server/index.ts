@@ -23,7 +23,7 @@ app.get("/api/me", async (req, res) => {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {userId: string};
-        const { data, error } = await supabase
+        const { data, error } = await db
             .from("users")
             .select("id, email, created_at")
             .eq("id", decoded.userId)

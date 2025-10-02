@@ -30,16 +30,16 @@ function App(){
         fetch("/api/me", {
             headers: { Authorization: `Bearer ${token}` },
         })
-        .then((res) => res.json())
-        .then((data) => {
-            if (data.userId){
-                setUserId(data.userId);
-                localStorage.setItem("userId", data.userId);
-            } else {
-                removeToken();
-                navigate("/login");
-            }
-        });
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.userId){
+                    setUserId(data.userId);
+                    localStorage.setItem("userId", data.userId);
+                } else {
+                    removeToken();
+                    navigate("/login");
+                }
+            });
     }, []);
 
     useEffect(() => {

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getToken, removeToken } from "../lib/auth";
 import { useNavigate } from "react-router-dom";
 
-export default function Account() {
+function AccountPage() {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
@@ -43,3 +43,5 @@ export default function Account() {
     </div>
   );
 }
+
+export default AccountPage;

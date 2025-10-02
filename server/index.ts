@@ -22,16 +22,24 @@ app.get("/api/me", async (req, res) => {
     }
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {userId: string};
+        const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { userId: string };
+
         const { data, error } = await db
             .from("users")
             .select("id, email, created_at")
             .eq("id", decoded.userId)
             .single();
-        if (error) return console.error("Supabase error:", error);
+
+        if (error || !data) {
+            return res.status(404).json({ error: "ユーザーが見つかりません" });
+        }
+
         res.json(data);
     } catch (err) {
-        res.status(401).json({ error: "トークンが無効です" });
+        if (err instanceof Error && err.name === "TokenExpiredError") {
+            return res.status(401).json({ error: "トークンの有効期限が切れています" });
+        }
+        return res.status(401).json({ error: "トークンが無効です" });
     }
 
 });

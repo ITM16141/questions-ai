@@ -21,6 +21,28 @@ function App(){
     const { loading, setLoading, progressMessage, setProgressMessage } = useContext(SessionContext);
 
     useEffect(() => {
+        const token = getToken();
+        if (!token) {
+            navigate("/login");
+            return;
+        }
+
+        fetch("/api/me", {
+            headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            if (data.userId){
+                setUserId(data.userId);
+                localStorage.setItem("userId", data.userId);
+            } else {
+                removeToken();
+                navigate("/login");
+            }
+        });
+    }, []);
+
+    useEffect(() => {
         const saved = localStorage.getItem("activeSessionId");
         if (saved) {
             setSessionId(saved);

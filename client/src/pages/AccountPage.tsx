@@ -1,3 +1,4 @@
+import "./App.css";
 import { useEffect, useState } from "react";
 import { getToken, removeToken } from "../lib/auth";
 import { useNavigate } from "react-router-dom";

@@ -7,8 +7,8 @@ import ReactDOM from "react-dom/client";
 import "./styles.css";
 import SharePage from "./pages/SharePage";
 import AccountPage from "./pages/AccountPage";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
     <SessionProvider>
@@ -19,8 +19,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 <Route path="/gallery" element={<GalleryPage />} />
                 <Route path="/share/:id" element={<SharePage />} />
                 <Route path="/account" element={<AccountPage />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<RegisterPage />} />
             </Routes>
         </BrowserRouter>
     </SessionProvider>

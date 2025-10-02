@@ -41,3 +41,9 @@ export async function fetchGallery() {
     if (!res.ok) throw new Error("ギャラリー取得に失敗しました");
     return await res.json();
 }
+
+export async function fetchAccount() {
+    const res = await fetch(`${BASE}/api/me`);
+    if (!res.ok) throw new Error("アカウント情報取得に失敗しました");
+    return await res.json();
+}

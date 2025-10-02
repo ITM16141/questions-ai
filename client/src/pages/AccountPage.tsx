@@ -2,6 +2,7 @@ import "./App.css";
 import { useEffect, useState } from "react";
 import { getToken, removeToken } from "../lib/auth";
 import { useNavigate } from "react-router-dom";
+import Tabs from "../components/Tabs"
 
 function AccountPage() {
   const [user, setUser] = useState(null);
@@ -36,11 +37,12 @@ function AccountPage() {
   if (!user) return <p>読み込み中...</p>;
 
   return (
-    <div>
-      <h2>アカウント情報</h2>
-      <p><strong>メール:</strong> {user.email}</p>
-      <p><strong>登録日:</strong> {new Date(user.created_at).toLocaleDateString()}</p>
-      <button onClick={handleLogout}>ログアウト</button>
+    <div className="account-page">
+        <Tabs/>
+        <h2>アカウント情報</h2>
+        <p><strong>メール:</strong> {user.email}</p>
+        <p><strong>登録日:</strong> {new Date(user.created_at).toLocaleDateString()}</p>
+        <button onClick={handleLogout}>ログアウト</button>
     </div>
   );
 }

@@ -14,7 +14,7 @@ function AccountPage() {
     }
 
     fetch("/api/me", {
-      headers: { Authorization: Bearer ${token} },
+      headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
       .then((data) => {

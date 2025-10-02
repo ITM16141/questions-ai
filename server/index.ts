@@ -23,7 +23,13 @@ app.get("/api/me", async (req, res) => {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {userId: string};
-        res.json({ userId: decoded.userId });
+        const { data, error } = await supabase
+            .from("users")
+            .select("id, email, created_at")
+            .eq("id", decoded.userId)
+            .single();
+        if (error) return console.error("Supabase error:", error);
+        res.json(data);
     } catch (err) {
         res.status(401).json({ error: "トークンが無効です" });
     }

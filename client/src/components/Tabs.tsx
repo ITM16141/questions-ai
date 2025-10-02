@@ -10,7 +10,7 @@ function Tabs() {
                 <NavLink to="/gallery" className={({isActive}) => isActive ? "active" : ""}>🌐 ギャラリー</NavLink>
             </nav>
             <nav className="account">
-                <NavLink to={"/login"} className={({isActive}) => isActive ? "active" : ""}>👨 アカウント</NavLink>
+                <NavLink to="/account" className={({isActive}) => isActive ? "active" : ""}>👨 アカウント</NavLink>
             </nav>
         </>
     );

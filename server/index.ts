@@ -209,6 +209,7 @@ app.post("/api/login", async (req, res) => {
         expiresIn: "7d",
     });
 
+    console.log(token);
     res.json({ token });
 });
 

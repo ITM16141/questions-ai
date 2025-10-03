@@ -17,13 +17,14 @@ export default function LoginPage() {
                 body: JSON.stringify({email, password}),
             });
 
+            const data = await res.json();
+
             if (!res.ok) {
-                alert("ログインに失敗しました");
+                alert("ログインに失敗:" + data.error);
                 return;
             }
 
-            const token = await res.json();
-            saveToken(token);
+            saveToken(data.token.accessToken);
             navigate("/");
         } catch (error) {
             alert("ログイン失敗: " + error);

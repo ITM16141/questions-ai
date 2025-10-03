@@ -10,18 +10,23 @@ export default function LoginPage() {
     const [password, setPassword] = useState("");
 
     const handleLogin = async () => {
-        const res = await fetch("/api/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password }),
-        });
+        try {
+            const res = await fetch("/api/login", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({email, password}),
+            });
 
-        const data = await res.json();
-        if (res.ok && data.token) {
-            saveToken(data.token);
+            if (!res.ok) {
+                alert("ログインに失敗しました");
+                return;
+            }
+
+            const token = await res.json();
+            saveToken(token);
             navigate("/");
-        } else {
-            alert("ログイン失敗: " + data.error);
+        } catch (error) {
+            alert("ログイン失敗: " + error);
         }
     };
 

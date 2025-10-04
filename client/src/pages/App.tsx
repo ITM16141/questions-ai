@@ -31,15 +31,28 @@ function App(){
         fetch("/api/me", {
             headers: { Authorization: `Bearer ${token}` },
         })
-            .then((res) => res.json())
-            .then((data) => {
-                if (data.userId){
+            .then(async (res) => {
+                if (!res.ok) {
+                    const text = await res.text();
+                    console.error("APIエラー:", text);
+                    removeToken();
+                    navigate("/login");
+                    return;
+                }
+
+                const data = await res.json();
+                if (data.userId) {
                     setUserId(data.userId);
                     localStorage.setItem("userId", data.userId);
                 } else {
                     removeToken();
                     navigate("/login");
                 }
+            })
+            .catch((err) => {
+                console.error("通信エラー:", err);
+                removeToken();
+                navigate("/login");
             });
     }, []);
 

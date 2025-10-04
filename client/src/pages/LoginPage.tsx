@@ -24,7 +24,7 @@ export default function LoginPage() {
                 return;
             }
 
-            saveToken(data.token.accessToken);
+            saveToken(data.token);
             navigate("/");
         } catch (error) {
             alert("ログインに失敗: " + error);

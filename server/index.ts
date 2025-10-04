@@ -180,15 +180,40 @@ app.get("/api/share/:id", async (req, res) => {
 });
 
 app.post("/api/register", async (req, res) => {
-    const { email, password } = req.body;
-    const password_hash = await bcrypt.hash(password, 10);
+    try {
+        const { email, password } = req.body;
 
-    const { error } = await db.from("users").insert([
-        { email, password_hash },
-    ]);
+        if (!email || !password) {
+            return res.status(400).json({ error: "メールとパスワードは必須です" });
+        }
 
-    if(error) console.error("Supabase error:", error);
-    res.json({ success: true });
+        const { data } = await db
+            .from("users")
+            .select("id")
+            .eq("email", email)
+            .single();
+
+        if (data) {
+            return res.status(409).json({ error: "このメールは既に登録されています" });
+        }
+
+        const password_hash = await bcrypt.hash(password, 10);
+
+        const { error } = await db
+            .from("users")
+            .insert([{ email, password_hash }]);
+
+        if (error) {
+            return res.status(500).json({ error: "登録に失敗しました" });
+        }
+
+        res.status(201).json({ message: "登録成功" });
+    } catch (err) {
+        if (err instanceof Error) {
+            console.error("登録エラー:", err.message);
+        }
+        res.status(500).json({ error: "サーバーエラー" });
+    }
 });
 
 app.post("/api/login", async (req, res) => {

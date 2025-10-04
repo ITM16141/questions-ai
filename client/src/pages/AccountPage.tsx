@@ -11,8 +11,8 @@ type User = {
 };
 
 function AccountPage() {
-  const [user, setUser] = useState<User | null>(null);
-  const navigate = useNavigate();
+    const [user, setUser] = useState<User | null>(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const token = getToken();
@@ -40,17 +40,17 @@ function AccountPage() {
         navigate("/login");
     };
 
-  if (!user) return <p>読み込み中...</p>;
+    if (!user) return <p>読み込み中...</p>;
 
-  return (
-    <div className="account-page">
-        <Tabs/>
-        <h2>アカウント情報</h2>
-        <div><strong>メール:</strong> {user.email}</div>
-        <div><strong>登録日:</strong> {new Date(user.created_at).toLocaleDateString()}</div>
-        <button onClick={handleLogout}>ログアウト</button>
-    </div>
-  );
+    return (
+        <div className="account-page">
+            <Tabs/>
+            <h2>アカウント情報</h2>
+            <div><strong>メール:</strong> {user.email}</div>
+            <div><strong>登録日:</strong> {new Date(user.created_at).toLocaleDateString()}</div>
+            <button onClick={handleLogout}>ログアウト</button>
+        </div>
+    );
 }
 
 export default AccountPage;

@@ -11,9 +11,9 @@ function SharePage() {
 
     useEffect(() => {
         fetch(`/api/share/${id}`)
-            .then(res => res.json())
-            .then(setEntry)
-            .catch(() => setEntry(null));
+        .then(res => res.json())
+        .then(setEntry)
+        .catch(() => setEntry(null));
     }, [id]);
 
     if (!entry) return <p>履歴が見つかりませんでした。</p>;

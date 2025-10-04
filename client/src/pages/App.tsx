@@ -22,7 +22,6 @@ function App(){
 
     useEffect(() => {
         const token = getToken();
-        console.log("token:", token); //DEBUG
         if (!token) {
             navigate("/login");
             return;

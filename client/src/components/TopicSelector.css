@@ -1,0 +1,39 @@
+.subject-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.subject-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+.subject-cell {
+    display: flex;
+    flex-direction: column;
+}
+
+.subject-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.topic-column {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding-left: 1.5rem;
+}
+
+.topic-label {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 1rem;
+}

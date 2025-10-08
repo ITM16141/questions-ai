@@ -1,19 +1,13 @@
-summary {
-    display: block;
-    cursor: pointer;
-    padding-bottom: 0.3rem;
-}
-
 .subject-grid {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
 }
 
 .subject-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 2rem;
+    gap: 1rem;
     align-items: start;
 }
 

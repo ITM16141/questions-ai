@@ -49,7 +49,7 @@ function TopicSelector({ values, onChange, disabled }: Props) {
                             }}
                             disabled={disabled}
                         />
-                        <span>{subject}</span>
+                        {subject}
                     </label>
                 </summary>
 
@@ -63,7 +63,7 @@ function TopicSelector({ values, onChange, disabled }: Props) {
                                 onChange={(e) => handleChange(topic, e.target.checked)}
                                 disabled={disabled}
                             />
-                            <span>{topic}</span>
+                            {topic}
                         </label>
                     ))}
                 </div>

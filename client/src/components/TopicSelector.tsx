@@ -1,5 +1,5 @@
 import "./TopicSelector.css";
-import React, {useState} from "react";
+import React from "react";
 
 type Props = {
     values: string[];
@@ -17,8 +17,6 @@ const topicGroups: Record<string, string[]> = {
 };
 
 function TopicSelector({values, onChange, disabled}: Props) {
-    const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
-
     const handleChange = (value: string, checked: boolean) => {
         if (checked) {
             onChange([...values, value]);
@@ -30,7 +28,7 @@ function TopicSelector({values, onChange, disabled}: Props) {
     return (
         <div>
             {Object.entries(topicGroups).map(([subject, topics]) => {
-                const allSelected = topics.every((t) => selectedTopics.includes(t));
+                const allSelected = topics.every((t) => values.includes(t));
 
                 return (
                     <details key={subject}>
@@ -41,10 +39,10 @@ function TopicSelector({values, onChange, disabled}: Props) {
                                     checked={allSelected}
                                     onChange={(e) => {
                                         const checked = e.target.checked;
-                                        setSelectedTopics((prev) =>
+                                        onChange(
                                             checked
-                                                ? [...new Set([...prev, ...topics])]
-                                                : prev.filter((t) => !topics.includes(t))
+                                                ? [...new Set([...values, ...topics])]
+                                                : values.filter((t) => !topics.includes(t))
                                         );
                                     }}
                                 />
@@ -58,7 +56,7 @@ function TopicSelector({values, onChange, disabled}: Props) {
                                     <input
                                         type="checkbox"
                                         value={topic}
-                                        checked={selectedTopics.includes(topic)}
+                                        checked={values.includes(topic)}
                                         onChange={(e) => handleChange(topic, e.target.checked)}
                                         disabled={disabled}
                                     />

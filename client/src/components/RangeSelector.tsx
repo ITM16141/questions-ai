@@ -40,6 +40,7 @@ function RangeSelector({values, onChange, disabled}: Props) {
                                         checked={values.includes(topic)}
                                         onChange={(e) => handleChange(topic, e.target.checked)}
                                         disabled={disabled}
+                                        style={{ display: "block",marginRight: "1rem" }}
                                     />
                                     {topic}
                                 </label>

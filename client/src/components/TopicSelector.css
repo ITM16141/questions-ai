@@ -1,8 +1,8 @@
 details {
-    display: block;
+    display: inline-block;
 }
 summary {
-    display: block;
+    display: inline-grid;
 }
 
 .subject-grid {

@@ -2,7 +2,7 @@ export type HistoryEntry = {
     id: string;
     userId: string;
     difficulty: string;
-    ranges: string[];
+    topics: string[];
     problem: string;
     solution: string;
     created_at: number;

@@ -45,7 +45,7 @@ app.get("/api/me", async (req, res) => {
 });
 
 app.get("/api/session", async (req, res) => {
-    const { userId, difficulty, ranges, sessionId } = req.query;
+    const { userId, difficulty, topics, sessionId } = req.query;
 
     const { error } = await db.from("sessions").insert({
         id: sessionId,
@@ -59,7 +59,7 @@ app.get("/api/session", async (req, res) => {
     handleSession({
         userId: String(userId),
         difficulty: String(difficulty),
-        ranges: JSON.parse(decodeURIComponent(String(ranges))),
+        topics: JSON.parse(decodeURIComponent(String(topics))),
         sessionId: String(sessionId)
     }).then(async result => {
         const { error: error1 } = await db.from("sessions").update({
@@ -74,7 +74,7 @@ app.get("/api/session", async (req, res) => {
             id: sessionId,
             userId: String(userId),
             difficulty: String(difficulty),
-            ranges: ranges,
+            topics: topics,
             problem: result.problem,
             solution: result.solution,
             created_at: new Date(Date.now()).toISOString(),

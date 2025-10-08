@@ -37,10 +37,10 @@ export function createSessionForUser(userId: string): ChatSession {
 export async function handleSession(params: {
     userId: string;
     difficulty: string;
-    ranges: string[];
+    topics: string[];
     sessionId: string;
 }) {
-    const { userId, difficulty, ranges, sessionId } = params;
+    const { userId, difficulty, topics, sessionId } = params;
     const uid = String(userId);
 
     let chat = getSessionForUser(uid);
@@ -48,7 +48,7 @@ export async function handleSession(params: {
         chat = createSessionForUser(uid);
     }
 
-    const range = ranges.join(", ");
+    const range = topics.join(", ");
     const prompt = `難易度：${difficulty}\n出題範囲：${range}\n特別要求：特になし`;
     const result = await chat.sendMessage(prompt);
     const fullText = result.response.text().includes("{start}")
@@ -66,7 +66,7 @@ export async function handleSession(params: {
             id: sessionId,
             userId: userId,
             difficulty: difficulty,
-            ranges: ranges,
+            topics: topics,
             problem: problem,
             solution: solution,
             created_at: created_at,

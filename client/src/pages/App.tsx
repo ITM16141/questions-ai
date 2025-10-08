@@ -3,7 +3,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { v4 as uuid } from "uuid";
 import { SessionContext } from "../context/SessionContext";
 import DifficultySelector from "../components/DifficultySelector";
-import RangeSelector from "../components/RangeSelector";
+import TopicSelector from "../components/TopicSelector";
 import MarkdownRenderer from "../components/MarkdownRenderer";
 import Tabs from "../components/Tabs"
 import {getToken, removeToken} from "../lib/auth";
@@ -13,7 +13,7 @@ function App(){
     const navigate = useNavigate();
     const [userId, setUserId] = useState(localStorage.getItem("userId"));
     const [difficulty, setDifficulty] = useState("標準レベル");
-    const [selectedRanges, setSelectedRanges] = useState<string[]>([]);
+    const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
     const [problem, setProblem] = useState("");
     const [solution, setSolution] = useState("");
     const [sessionId, setSessionId] = useState<string | null>(null);
@@ -109,7 +109,7 @@ function App(){
         localStorage.setItem("activeSessionId", newSessionId);
 
         await fetch(
-            `/api/session?sessionId=${newSessionId}&userId=${userId}&difficulty=${difficulty}&ranges=${encodeURIComponent(JSON.stringify(selectedRanges))}`
+            `/api/session?sessionId=${newSessionId}&userId=${userId}&difficulty=${difficulty}&topics=${encodeURIComponent(JSON.stringify(selectedTopics))}`
         );
     };
 
@@ -130,7 +130,7 @@ function App(){
             <h1>🧠 数学問題ジェネレーター</h1>
 
             <DifficultySelector value={difficulty} onChange={setDifficulty} disabled={loading} />
-            <RangeSelector values={selectedRanges} onChange={setSelectedRanges} disabled={loading} />
+            <TopicSelector values={selectedTopics} onChange={setSelectedTopics} disabled={loading} />
 
             {!loading ? (
                 <button onClick={generate} className="generate-button">

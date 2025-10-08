@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 
 type Props = {
     values: string[];
@@ -16,15 +16,6 @@ const allRanges: Record<string, string[]> = {
 };
 
 function RangeSelector({values, onChange, disabled}: Props) {
-    const [openSections, setOpenSections] = useState<Record<string, boolean>>({});
-
-    const toggleSection = (subject: string) => {
-        setOpenSections((prev) => ({
-            ...prev,
-            [subject]: !prev[subject],
-        }));
-    };
-
     const handleChange = (value: string, checked: boolean) => {
         if (checked) {
             onChange([...values, value]);
@@ -38,10 +29,8 @@ function RangeSelector({values, onChange, disabled}: Props) {
             <label>出題範囲：</label>
             {Object.entries(allRanges).map(([subject, topics]) => (
                 <div key={subject} className="subject-section">
-                    <summary>{openSections[subject] ? "▼" : "▶"}</summary>
-                    <div>{subject}</div>
-
-                    {openSections[subject] && (
+                    <details>
+                        <summary>{subject}</summary>
                         <div className="checkbox-group">
                             {topics.map((topic) => (
                                 <label key={topic} style={{ display: "block", marginLeft: "1rem" }}>
@@ -56,7 +45,7 @@ function RangeSelector({values, onChange, disabled}: Props) {
                                 </label>
                             ))}
                         </div>
-                    )}
+                    </details>
                 </div>
             ))}
         </div>

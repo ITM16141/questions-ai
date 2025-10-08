@@ -1,3 +1,10 @@
+details {
+    display: block;
+}
+summary {
+    display: block;
+}
+
 .subject-grid {
     display: flex;
     flex-direction: column;

@@ -33,14 +33,14 @@ function RangeSelector({values, onChange, disabled}: Props) {
                         <summary>{subject}</summary>
                         <div className="checkbox-group">
                             {topics.map((topic) => (
-                                <label key={topic} style={{ marginLeft: "1rem" }}>
+                                <label key={topic} style={{ marginRight: "1rem" }}>
                                     <input
                                         type="checkbox"
                                         value={topic}
                                         checked={values.includes(topic)}
                                         onChange={(e) => handleChange(topic, e.target.checked)}
                                         disabled={disabled}
-                                        style={{ marginRight: "1rem" }}
+                                        style={{ marginLeft: "1rem" }}
                                     />
                                     {topic}
                                 </label>

@@ -21,6 +21,11 @@ summary:hover {
     cursor: pointer;
 }
 
+input[type="checkbox"] {
+    float: none;
+    margin: 0;
+}
+
 @keyframes fadeInOut {
     0% { opacity: 0.2; }
     50% { opacity: 1; }

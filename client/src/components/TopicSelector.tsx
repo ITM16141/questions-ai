@@ -33,7 +33,7 @@ function TopicSelector({ values, onChange, disabled }: Props) {
         const allSelected = topics.every((t) => values.includes(t));
 
         return (
-            <details key={subject} className="subject-block">
+            <details className="subject-block">
                 <summary>
                     <label className="subject-label">
                         <input
@@ -49,11 +49,11 @@ function TopicSelector({ values, onChange, disabled }: Props) {
                             }}
                             disabled={disabled}
                         />
-                        {subject}
+                        <span>{subject}</span>
                     </label>
                 </summary>
 
-                <div className="topic-row">
+                <div className="topic-list">
                     {topics.map((topic) => (
                         <label key={topic} className="topic-label">
                             <input
@@ -63,7 +63,7 @@ function TopicSelector({ values, onChange, disabled }: Props) {
                                 onChange={(e) => handleChange(topic, e.target.checked)}
                                 disabled={disabled}
                             />
-                            {topic}
+                            <span>{topic}</span>
                         </label>
                     ))}
                 </div>
@@ -72,16 +72,18 @@ function TopicSelector({ values, onChange, disabled }: Props) {
     };
 
     return (
-        <div className="topic-grid">
-            <div className="topic-column">
-                {leftSubjects.map(renderSubject)}
-            </div>
-            <div className="topic-column">
-                {rightSubjects.map(renderSubject)}
-            </div>
+        <div className="subject-grid">
+            {leftSubjects.map((left, i) => {
+                const right = rightSubjects[i];
+                return (
+                    <div className="subject-row" key={left}>
+                        <div className="subject-cell">{renderSubject(left)}</div>
+                        <div className="subject-cell">{right ? renderSubject(right) : null}</div>
+                    </div>
+                );
+            })}
         </div>
     );
 }
-
 
 export default TopicSelector;

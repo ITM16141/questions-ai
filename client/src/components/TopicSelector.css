@@ -24,7 +24,7 @@
     margin-bottom: 0.5rem;
 }
 
-.topic-column {
+.topic-list {
     display: flex;
     flex-direction: column;
     gap: 0.3rem;

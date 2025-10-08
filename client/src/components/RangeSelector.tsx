@@ -38,13 +38,8 @@ function RangeSelector({values, onChange, disabled}: Props) {
             <label>出題範囲：</label>
             {Object.entries(allRanges).map(([subject, topics]) => (
                 <div key={subject} className="subject-section">
-                    <button
-                        className="toggle-button"
-                        type="button"
-                        onClick={() => toggleSection(subject)}
-                    >
-                        {openSections[subject] ? "▼" : "▶"} {subject}
-                    </button>
+                    <summary>{openSections[subject] ? "▼" : "▶"}</summary>
+                    <div>{subject}</div>
 
                     {openSections[subject] && (
                         <div className="checkbox-group">

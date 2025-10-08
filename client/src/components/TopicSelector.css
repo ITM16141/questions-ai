@@ -1,3 +1,9 @@
+summary {
+    display: block;
+    cursor: pointer;
+    padding-bottom: 0.3rem;
+}
+
 .subject-grid {
     display: flex;
     flex-direction: column;
@@ -8,6 +14,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 2rem;
+    align-items: start;
 }
 
 .subject-cell {
@@ -37,12 +44,10 @@
 }
 
 .topic-label {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     gap: 0.4rem;
     font-size: 1rem;
-    margin-bottom: 0.4rem;
-    white-space: nowrap;
 }
 
 .topic-name {

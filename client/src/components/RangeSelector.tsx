@@ -33,7 +33,7 @@ function RangeSelector({values, onChange, disabled}: Props) {
                         <summary>{subject}</summary>
                         <div className="checkbox-group">
                             {topics.map((topic) => (
-                                <label key={topic} style={{ marginRight: "1rem" }}>
+                                <label className="topic-label">
                                     <input
                                         type="checkbox"
                                         value={topic}

@@ -37,3 +37,9 @@
     gap: 0.4rem;
     font-size: 1rem;
 }
+
+@media (max-width: 800px) {
+    .subject-row {
+        grid-template-columns: 1fr;
+    }
+}

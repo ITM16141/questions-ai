@@ -12,11 +12,12 @@ summary:hover {
 }
 
 .topic-label {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     gap: 0.5rem;
-    margin-bottom: 0.4rem;
     font-size: 1rem;
+    margin-bottom: 0.4rem;
+    cursor: pointer;
 }
 
 @keyframes fadeInOut {

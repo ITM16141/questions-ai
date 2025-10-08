@@ -1,3 +1,4 @@
+import "./RangeSelector.css";
 import React from "react";
 
 type Props = {

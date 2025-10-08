@@ -1,0 +1,13 @@
+.topic-label {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    margin-bottom: 0.4rem;
+    font-size: 1rem;
+}
+
+input[type="checkbox"] {
+    float: none;
+    margin: 0;
+}

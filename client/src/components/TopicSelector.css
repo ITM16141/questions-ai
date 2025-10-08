@@ -38,10 +38,13 @@
 }
 
 .topic-label {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
-    font-size: 1rem;
+    gap: 0.5rem;
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    white-space: nowrap;
 }
 
 .topic-name {

@@ -45,7 +45,7 @@ app.get("/api/me", async (req, res) => {
 });
 
 app.get("/api/session", async (req, res) => {
-    const { userId, difficulty, includeMathThree, sessionId } = req.query;
+    const { userId, difficulty, ranges, sessionId } = req.query;
 
     const { error } = await db.from("sessions").insert({
         id: sessionId,
@@ -59,7 +59,7 @@ app.get("/api/session", async (req, res) => {
     handleSession({
         userId: String(userId),
         difficulty: String(difficulty),
-        includeMathThree: String(includeMathThree).toLowerCase() === 'true',
+        ranges: JSON.parse(decodeURIComponent(String(ranges))),
         sessionId: String(sessionId)
     }).then(async result => {
         const { error: error1 } = await db.from("sessions").update({
@@ -74,7 +74,7 @@ app.get("/api/session", async (req, res) => {
             id: sessionId,
             userId: String(userId),
             difficulty: String(difficulty),
-            includeMathThree: includeMathThree,
+            ranges: ranges,
             problem: result.problem,
             solution: result.solution,
             created_at: new Date(Date.now()).toISOString(),

@@ -2,7 +2,7 @@ export type HistoryEntry = {
     id: string;
     userId: string;
     difficulty: string;
-    includeMathThree: boolean;
+    ranges: string[];
     problem: string;
     solution: string;
     created_at: number;

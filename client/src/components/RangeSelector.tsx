@@ -1,19 +1,69 @@
-import React from "react";
+import React, {useState} from "react";
 
 type Props = {
-    value: boolean;
-    onChange: (value: boolean) => void;
+    values: string[];
+    onChange: (values: string[]) => void;
     disabled?: boolean;
 };
 
-function RangeSelector({ value, onChange, disabled }: Props) {
+const allRanges: Record<string, string[]> = {
+    "数学I": ["数と式", "集合と論理", "二次関数", "図形と計量", "データの分析"],
+    "数学A": ["場合の数と確率", "整数の性質", "図形の性質"],
+    "数学II": ["式と証明", "方程式と不等式", "図形と方程式", "三角関数", "指数・対数関数", "微分・積分の基礎"],
+    "数学B": ["数列", "統計的な推測"],
+    "数学III": ["関数の極限", "微分法", "積分法", "微積の応用", "三角・指数・対数関数の微積"],
+    "数学C": ["ベクトル", "複素数平面", "行列と一次変換", "二次曲線"]
+};
+
+function RangeSelector({values, onChange, disabled}: Props) {
+    const [openSections, setOpenSections] = useState<Record<string, boolean>>({});
+
+    const toggleSection = (subject: string) => {
+        setOpenSections((prev) => ({
+            ...prev,
+            [subject]: !prev[subject],
+        }));
+    };
+
+    const handleChange = (value: string, checked: boolean) => {
+        if (checked) {
+            onChange([...values, value]);
+        } else {
+            onChange(values.filter((t) => t !== value));
+        }
+    };
+
     return (
-        <div style={{ marginBottom: "1rem" }}>
+        <div className="range-selector">
             <label>出題範囲：</label>
-            <select value={value ? "true" : "false"} onChange={(e) => onChange(e.target.value === "true")} disabled={disabled}>
-                <option value="false">数学IIIを除く</option>
-                <option value="true">数学IIIを含む</option>
-            </select>
+            {Object.entries(allRanges).map(([subject, topics]) => (
+                <div key={subject} className="subject-section">
+                    <button
+                        className="toggle-button"
+                        type="button"
+                        onClick={() => toggleSection(subject)}
+                    >
+                        {openSections[subject] ? "▼" : "▶"} {subject}
+                    </button>
+
+                    {openSections[subject] && (
+                        <div className="checkbox-group">
+                            {topics.map((topic) => (
+                                <label key={topic} style={{ display: "block", marginLeft: "1rem" }}>
+                                    <input
+                                        type="checkbox"
+                                        value={topic}
+                                        checked={values.includes(topic)}
+                                        onChange={(e) => handleChange(topic, e.target.checked)}
+                                        disabled={disabled}
+                                    />
+                                    {topic}
+                                </label>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            ))}
         </div>
     );
 }

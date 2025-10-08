@@ -13,7 +13,7 @@ function App(){
     const navigate = useNavigate();
     const [userId, setUserId] = useState(localStorage.getItem("userId"));
     const [difficulty, setDifficulty] = useState("標準レベル");
-    const [includeMathThree, setIncludeMathThree] = useState(false);
+    const [selectedRanges, setSelectedRanges] = useState<string[]>([]);
     const [problem, setProblem] = useState("");
     const [solution, setSolution] = useState("");
     const [sessionId, setSessionId] = useState<string | null>(null);
@@ -109,7 +109,7 @@ function App(){
         localStorage.setItem("activeSessionId", newSessionId);
 
         await fetch(
-            `/api/session?sessionId=${newSessionId}&userId=${userId}&difficulty=${difficulty}&includeMathThree=${includeMathThree}`
+            `/api/session?sessionId=${newSessionId}&userId=${userId}&difficulty=${difficulty}&ranges=${encodeURIComponent(JSON.stringify(selectedRanges))}`
         );
     };
 
@@ -130,7 +130,7 @@ function App(){
             <h1>🧠 数学問題ジェネレーター</h1>
 
             <DifficultySelector value={difficulty} onChange={setDifficulty} disabled={loading} />
-            <RangeSelector value={includeMathThree} onChange={setIncludeMathThree} disabled={loading} />
+            <RangeSelector values={selectedRanges} onChange={setSelectedRanges} disabled={loading} />
 
             {!loading ? (
                 <button onClick={generate} className="generate-button">

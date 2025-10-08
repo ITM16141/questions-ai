@@ -16,12 +16,17 @@
 }
 
 .subject-label {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 0.5rem;
     font-weight: bold;
     font-size: 1.1rem;
     margin-bottom: 0.5rem;
+    white-space: nowrap;
+}
+
+.subject-name {
+    flex-shrink: 0;
 }
 
 .topic-list {
@@ -36,6 +41,10 @@
     align-items: center;
     gap: 0.4rem;
     font-size: 1rem;
+}
+
+.topic-name {
+    flex-shrink: 0;
 }
 
 @media (max-width: 800px) {

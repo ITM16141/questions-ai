@@ -11,7 +11,7 @@ const topicGroups: Record<string, string[]> = {
     "数学I": ["数と式", "集合と論理", "二次関数", "図形と計量", "データの分析"],
     "数学A": ["場合の数と確率", "整数の性質", "図形の性質"],
     "数学II": ["式と証明", "方程式と不等式", "図形と方程式", "三角関数", "指数・対数関数", "微分・積分の基礎"],
-    "数学B": ["数列", "統計的な推測"],
+    "数学B": ["数列", "数学的帰納法", "統計的な推測"],
     "数学III": ["関数の極限", "微分法", "積分法", "微積の応用", "三角・指数・対数関数の微積"],
     "数学C": ["ベクトル", "複素数平面", "行列と一次変換", "二次曲線"]
 };
@@ -31,24 +31,22 @@ function TopicSelector({values, onChange, disabled}: Props) {
                 const allSelected = topics.every((t) => values.includes(t));
 
                 return (
-                    <details key={subject}>
-                        <summary>
-                            <label className="subject-label">
-                                <input
-                                    type="checkbox"
-                                    checked={allSelected}
-                                    onChange={(e) => {
-                                        const checked = e.target.checked;
-                                        onChange(
-                                            checked
-                                                ? [...new Set([...values, ...topics])]
-                                                : values.filter((t) => !topics.includes(t))
-                                        );
-                                    }}
-                                />
-                                <span>{subject}</span>
-                            </label>
-                        </summary>
+                    <div>
+                        <label className="subject-label">
+                            <input
+                                type="checkbox"
+                                checked={allSelected}
+                                onChange={(e) => {
+                                    const checked = e.target.checked;
+                                    onChange(
+                                        checked
+                                            ? [...new Set([...values, ...topics])]
+                                            : values.filter((t) => !topics.includes(t))
+                                    );
+                                }}
+                            />
+                            <span>{subject}</span>
+                        </label>
 
                         <div className="topic-row">
                             {topics.map((topic) => (
@@ -64,7 +62,7 @@ function TopicSelector({values, onChange, disabled}: Props) {
                                 </label>
                             ))}
                         </div>
-                    </details>
+                    </div>
                 );
             })}
         </div>

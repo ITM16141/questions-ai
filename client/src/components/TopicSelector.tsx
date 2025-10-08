@@ -44,6 +44,7 @@ function TopicSelector({values, onChange, disabled}: Props) {
                                             : values.filter((t) => !topics.includes(t))
                                     );
                                 }}
+                                disabled={disabled}
                             />
                             <span>{subject}</span>
                         </label>

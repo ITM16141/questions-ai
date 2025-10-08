@@ -16,7 +16,10 @@ const topicGroups: Record<string, string[]> = {
     "数学C": ["ベクトル", "複素数平面", "行列と一次変換", "二次曲線"]
 };
 
-function TopicSelector({values, onChange, disabled}: Props) {
+const leftSubjects = ["数学I", "数学II", "数学III"];
+const rightSubjects = ["数学A", "数学B", "数学C"];
+
+function TopicSelector({ values, onChange, disabled }: Props) {
     const handleChange = (value: string, checked: boolean) => {
         if (checked) {
             onChange([...values, value]);
@@ -25,49 +28,60 @@ function TopicSelector({values, onChange, disabled}: Props) {
         }
     };
 
-    return (
-        <div>
-            {Object.entries(topicGroups).map(([subject, topics]) => {
-                const allSelected = topics.every((t) => values.includes(t));
+    const renderSubject = (subject: string) => {
+        const topics = topicGroups[subject];
+        const allSelected = topics.every((t) => values.includes(t));
 
-                return (
-                    <div>
-                        <label className="subject-label">
+        return (
+            <details key={subject} className="subject-block">
+                <summary>
+                    <label className="subject-label">
+                        <input
+                            type="checkbox"
+                            checked={allSelected}
+                            onChange={(e) => {
+                                const checked = e.target.checked;
+                                onChange(
+                                    checked
+                                        ? [...new Set([...values, ...topics])]
+                                        : values.filter((t) => !topics.includes(t))
+                                );
+                            }}
+                            disabled={disabled}
+                        />
+                        <span>{subject}</span>
+                    </label>
+                </summary>
+
+                <div className="topic-row">
+                    {topics.map((topic) => (
+                        <label key={topic} className="topic-label">
                             <input
                                 type="checkbox"
-                                checked={allSelected}
-                                onChange={(e) => {
-                                    const checked = e.target.checked;
-                                    onChange(
-                                        checked
-                                            ? [...new Set([...values, ...topics])]
-                                            : values.filter((t) => !topics.includes(t))
-                                    );
-                                }}
+                                value={topic}
+                                checked={values.includes(topic)}
+                                onChange={(e) => handleChange(topic, e.target.checked)}
                                 disabled={disabled}
                             />
-                            <span>{subject}</span>
+                            <span>{topic}</span>
                         </label>
+                    ))}
+                </div>
+            </details>
+        );
+    };
 
-                        <div className="topic-row">
-                            {topics.map((topic) => (
-                                <label key={topic} className="topic-label">
-                                    <input
-                                        type="checkbox"
-                                        value={topic}
-                                        checked={values.includes(topic)}
-                                        onChange={(e) => handleChange(topic, e.target.checked)}
-                                        disabled={disabled}
-                                    />
-                                    <span>{topic}</span>
-                                </label>
-                            ))}
-                        </div>
-                    </div>
-                );
-            })}
+    return (
+        <div className="topic-grid">
+            <div className="topic-column">
+                {leftSubjects.map(renderSubject)}
+            </div>
+            <div className="topic-column">
+                {rightSubjects.map(renderSubject)}
+            </div>
         </div>
     );
 }
+
 
 export default TopicSelector;

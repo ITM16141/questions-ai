@@ -1,8 +1,8 @@
 .subject-grid-horizontal {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    gap: 1.5rem;
-    margin-top: 1rem;
+    gap: 1rem;
+    margin-top: 0.5rem;
 }
 
 .subject-column {
@@ -15,7 +15,7 @@
     align-items: center;
     gap: 0.5rem;
     font-weight: bold;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     margin-bottom: 0.5rem;
     white-space: nowrap;
 }
@@ -31,7 +31,7 @@
     display: flex;
     align-items: center;
     gap: 0.4rem;
-    font-size: 1rem;
+    font-size: 1.1rem;
 }
 
 input[type="checkbox"] {

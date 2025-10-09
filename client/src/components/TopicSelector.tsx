@@ -16,7 +16,7 @@ const topicGroups: Record<string, string[]> = {
     "数学C": ["ベクトル", "複素数平面", "行列と一次変換", "二次曲線"]
 };
 
-const subjectOrder = ["数学I", "数学II", "数学III", "数学A", "数学B", "数学C"];
+const subjectOrder = ["数学I", "数学A", "数学II", "数学B", "数学III", "数学C"];
 
 function TopicSelector({ values, onChange, disabled }: Props) {
     const handleChange = (value: string, checked: boolean) => {

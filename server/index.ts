@@ -74,7 +74,7 @@ app.get("/api/session", async (req, res) => {
             id: sessionId,
             userId: String(userId),
             difficulty: String(difficulty),
-            topics: topics,
+            topics: JSON.parse(decodeURIComponent(String(topics))),
             problem: result.problem,
             solution: result.solution,
             created_at: new Date(Date.now()).toISOString(),

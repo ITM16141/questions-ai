@@ -45,6 +45,12 @@
     white-space: nowrap;
 }
 
+.topic-label input[type="checkbox"] {
+    width: auto;
+    height: auto;
+    margin: 0;
+}
+
 .topic-name {
     flex-shrink: 0;
 }

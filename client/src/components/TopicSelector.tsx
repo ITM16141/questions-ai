@@ -35,41 +35,37 @@ function TopicSelector({ values, onChange, disabled }: Props) {
 
                 return (
                     <div className="subject-column" key={subject}>
-                        <details className="subject-block">
-                            <summary>
-                                <label className="subject-label">
+                        <label className="subject-label">
+                            <input
+                                type="checkbox"
+                                checked={allSelected}
+                                onChange={(e) => {
+                                    const checked = e.target.checked;
+                                    onChange(
+                                        checked
+                                            ? [...new Set([...values, ...topics])]
+                                            : values.filter((t) => !topics.includes(t))
+                                    );
+                                }}
+                                disabled={disabled}
+                            />
+                            <span>{subject}</span>
+                        </label>
+
+                        <div className="topic-list">
+                            {topics.map((topic) => (
+                                <label key={topic} className="topic-label">
                                     <input
                                         type="checkbox"
-                                        checked={allSelected}
-                                        onChange={(e) => {
-                                            const checked = e.target.checked;
-                                            onChange(
-                                                checked
-                                                    ? [...new Set([...values, ...topics])]
-                                                    : values.filter((t) => !topics.includes(t))
-                                            );
-                                        }}
+                                        value={topic}
+                                        checked={values.includes(topic)}
+                                        onChange={(e) => handleChange(topic, e.target.checked)}
                                         disabled={disabled}
                                     />
-                                    {subject}
+                                    <span>{topic}</span>
                                 </label>
-                            </summary>
-
-                            <div className="topic-list">
-                                {topics.map((topic) => (
-                                    <label key={topic} className="topic-label">
-                                        <input
-                                            type="checkbox"
-                                            value={topic}
-                                            checked={values.includes(topic)}
-                                            onChange={(e) => handleChange(topic, e.target.checked)}
-                                            disabled={disabled}
-                                        />
-                                        {topic}
-                                    </label>
-                                ))}
-                            </div>
-                        </details>
+                            ))}
+                        </div>
                     </div>
                 );
             })}

@@ -1,7 +1,6 @@
 import "./App.css";
 import React, { useEffect, useState } from "react";
 import { fetchGallery } from "../api";
-import MarkdownRenderer from "../components/MarkdownRenderer";
 import Tabs from "../components/Tabs";
 import {HistoryEntry} from "../types";
 import {useNavigate} from "react-router-dom";

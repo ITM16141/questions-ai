@@ -35,20 +35,6 @@ summary:hover {
     animation: dots 1.5s steps(3, end) infinite;
 }
 
-.topics {
-    margin-top: 0.5rem;
-}
-
-.topic {
-    display: inline-block;
-    background: #e0f0ff;
-    color: #0077cc;
-    padding: 0.2rem 0.5rem;
-    margin-right: 0.3rem;
-    border-radius: 4px;
-    font-size: 0.9rem;
-}
-
 .topic-search {
     margin-bottom: 1rem;
     padding: 0.5rem;
@@ -68,6 +54,7 @@ body {
 .history-page,
 .gallery-page,
 .share-page,
+.account-page,
 .login-page,
 .register-page {
     padding: 1rem;

@@ -47,14 +47,14 @@ app.get("/api/me", async (req, res) => {
 app.get("/api/session", async (req, res) => {
     const { userId, difficulty, topics, sessionId } = req.query;
 
-    const { error } = await db.from("sessions").insert({
+    const { error: error1 } = await db.from("sessions").insert({
         id: sessionId,
         status: "pending",
         problem: null,
         solution: null
     });
 
-    if(error) console.error("Supabase error:", error);
+    if(error1) console.error("Supabase error:", error1);
 
     handleSession({
         userId: String(userId),
@@ -62,27 +62,11 @@ app.get("/api/session", async (req, res) => {
         topics: JSON.parse(decodeURIComponent(String(topics))),
         sessionId: String(sessionId)
     }).then(async result => {
-        const { error: error1 } = await db.from("sessions").update({
+        const { error: error2 } = await db.from("sessions").update({
             status: "done",
             problem: result.problem,
             solution: result.solution,
         }).eq("id", String(sessionId));
-
-        if(error1) console.error("Supabase error:", error1);
-
-        const { error: error2 } = await db.from("history").insert({
-            id: sessionId,
-            userId: String(userId),
-            difficulty: String(difficulty),
-            topics: JSON.parse(decodeURIComponent(String(topics))),
-            problem: result.problem,
-            solution: result.solution,
-            created_at: new Date(Date.now()).toISOString(),
-            tags: [""],
-            pinned: false,
-            opened: true,
-            views: 0
-        });
 
         if(error2) console.error("Supabase error:", error2);
     });

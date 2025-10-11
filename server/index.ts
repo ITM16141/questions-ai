@@ -104,20 +104,6 @@ app.get("/api/history", async (req, res) => {
     res.json(data);
 });
 
-app.patch("/api/history/:id/tags", async (req, res) => {
-    const { id } = req.params;
-    const { tags } = req.body;
-    if (!Array.isArray(tags)) return res.status(400).json({ error: "tags must be array" });
-
-    const { error } = await db.from("history").update({
-        tags: tags
-    }).eq("id", id);
-
-    if(error) console.error("Supabase error:", error);
-
-    res.json({ success: true, tags });
-});
-
 app.patch("/api/history/:id/pin", async (req, res) => {
     const { id } = req.params;
     const { pinned } = req.body;

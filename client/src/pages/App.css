@@ -35,11 +35,11 @@ summary:hover {
     animation: dots 1.5s steps(3, end) infinite;
 }
 
-.tags {
+.topics {
     margin-top: 0.5rem;
 }
 
-.tag {
+.topic {
     display: inline-block;
     background: #e0f0ff;
     color: #0077cc;
@@ -49,24 +49,7 @@ summary:hover {
     font-size: 0.9rem;
 }
 
-.tag-remove {
-    margin-left: 0.3rem;
-    background: none;
-    border: none;
-    color: red;
-    cursor: pointer;
-}
-
-.tag-editor {
-    margin-top: 0.5rem;
-}
-
-.tag-editor input {
-    padding: 0.3rem;
-    margin-right: 0.5rem;
-}
-
-.tag-search {
+.topic-search {
     margin-bottom: 1rem;
     padding: 0.5rem;
     width: 100%;

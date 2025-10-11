@@ -8,7 +8,7 @@ import {useNavigate} from "react-router-dom";
 
 function GalleryPage(){
     const [entries, setEntries] = useState<HistoryEntry[]>([]);
-    const [searchTag, setSearchTag] = useState("");
+    const [searchTopic, setSearchTopic] = useState("");
     const [inputId, setInputId] = useState("");
     const navigate = useNavigate();
 
@@ -16,9 +16,9 @@ function GalleryPage(){
         fetchGallery().then(setEntries);
     }, []);
 
-    const filtered = searchTag.trim()
+    const filtered = searchTopic.trim()
         ? entries.filter(entry =>
-            entry.tags.some(tag => tag.toLowerCase().includes(searchTag.toLowerCase()))
+            entry.topics.some(topic => topic.toLowerCase().includes(searchTopic.toLowerCase()))
         )
         : entries;
 
@@ -45,8 +45,8 @@ function GalleryPage(){
             <input
                 type="text"
                 placeholder="タグで検索"
-                value={searchTag}
-                onChange={e => setSearchTag(e.target.value)}
+                value={searchTopic}
+                onChange={e => setSearchTopic(e.target.value)}
             />
 
             {filtered.map((entry, idx) => (
@@ -55,7 +55,6 @@ function GalleryPage(){
                     <div><strong>出題範囲：</strong>{entry.topics.join(", ")}</div>
                     <div><strong>日時：</strong>{new Date(entry.created_at).toLocaleString()}</div>
                     <div><strong>閲覧数：</strong>{entry.views}</div>
-                    <div><strong>タグ：</strong>{entry.tags.join(", ")}</div>
                     <details>
                         <summary>📘 問題を見る</summary>
                         <div className="problem-block">

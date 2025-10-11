@@ -6,16 +6,6 @@ export async function fetchHistory(userId: string) {
     return await res.json();
 }
 
-export async function updateTags(id: string, tags: string[]) {
-    const res = await fetch(`${BASE}/api/history/${id}/tags`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ tags })
-    });
-    if (!res.ok) throw new Error("タグ更新に失敗しました");
-    return await res.json();
-}
-
 export async function updatePinned(id: string, pinned: boolean) {
     const res = await fetch(`${BASE}/api/history/${id}/pin`, {
         method: "PATCH",

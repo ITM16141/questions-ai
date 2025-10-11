@@ -55,18 +55,14 @@ function GalleryPage(){
                     <div><strong>出題範囲：</strong>{entry.topics.join(", ")}</div>
                     <div><strong>日時：</strong>{new Date(entry.created_at).toLocaleString()}</div>
                     <div><strong>閲覧数：</strong>{entry.views}</div>
-                    <details>
-                        <summary>📘 問題を見る</summary>
-                        <div className="problem-block">
-                            <pre><MarkdownRenderer content={entry.problem} /></pre>
-                        </div>
-                    </details>
-                    <details>
-                        <summary>🧠 解答を見る</summary>
-                        <div className="solution-block">
-                            <pre><MarkdownRenderer content={entry.solution} /></pre>
-                        </div>
-                        </details>
+                    <form
+                        onSubmit={e => {
+                            e.preventDefault();
+                            navigate(`/share/${entry.id}`);
+                        }}
+                    >
+                        <button type="submit">閲覧</button>
+                    </form>
                 </div>
             ))}
         </div>

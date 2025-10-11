@@ -41,10 +41,10 @@ function GalleryPage(){
                 />
                 <button type="submit">表示</button>
             </form>
-            <h2>タグから検索</h2>
+            <h2>出題範囲から検索</h2>
             <input
                 type="text"
-                placeholder="タグで検索"
+                placeholder="出題範囲で検索"
                 value={searchTopic}
                 onChange={e => setSearchTopic(e.target.value)}
             />

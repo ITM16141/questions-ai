@@ -75,6 +75,7 @@ function App(){
                     setProblem(data.problem);
                     setSolution(data.solution);
                     setLoading(false);
+                    setShowSolution(false);
                     setProgressMessage("パッケージの生成が完了しました！");
                     clearInterval(interval);
                     localStorage.removeItem("activeSessionId");

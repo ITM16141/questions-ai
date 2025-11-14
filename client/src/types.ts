@@ -6,7 +6,6 @@ export type HistoryEntry = {
     problem: string;
     solution: string;
     created_at: number;
-    tags: string[];
     pinned: boolean;
     opened: boolean;
     views: number;

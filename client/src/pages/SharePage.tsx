@@ -26,7 +26,6 @@ function SharePage() {
             <div><strong>出題範囲：</strong>{entry.topics.join(", ")}</div>
             <div><strong>日時：</strong>{new Date(entry.created_at).toLocaleString()}</div>
             <div><strong>閲覧数：</strong>{entry.views}</div>
-            <div><strong>タグ：</strong>{entry.tags?.join?.(", ") || ""}</div>
 
             <div className="problem-block">
                 <pre><MarkdownRenderer content={entry.problem} /></pre>

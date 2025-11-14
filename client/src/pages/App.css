@@ -35,38 +35,7 @@ summary:hover {
     animation: dots 1.5s steps(3, end) infinite;
 }
 
-.tags {
-    margin-top: 0.5rem;
-}
-
-.tag {
-    display: inline-block;
-    background: #e0f0ff;
-    color: #0077cc;
-    padding: 0.2rem 0.5rem;
-    margin-right: 0.3rem;
-    border-radius: 4px;
-    font-size: 0.9rem;
-}
-
-.tag-remove {
-    margin-left: 0.3rem;
-    background: none;
-    border: none;
-    color: red;
-    cursor: pointer;
-}
-
-.tag-editor {
-    margin-top: 0.5rem;
-}
-
-.tag-editor input {
-    padding: 0.3rem;
-    margin-right: 0.5rem;
-}
-
-.tag-search {
+.topic-search {
     margin-bottom: 1rem;
     padding: 0.5rem;
     width: 100%;
@@ -85,10 +54,11 @@ body {
 .history-page,
 .gallery-page,
 .share-page,
+.account-page,
 .login-page,
 .register-page {
     padding: 1rem;
-    max-width: 600px;
+    max-width: 1000px;
     margin: auto;
 }
 
@@ -127,7 +97,7 @@ textarea {
     gap: 0.5rem;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 800px) {
     h1,
     h2,
     h3 {

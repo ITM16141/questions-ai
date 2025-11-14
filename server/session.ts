@@ -70,7 +70,6 @@ export async function handleSession(params: {
             problem: problem,
             solution: solution,
             created_at: created_at,
-            tags: [],
             pinned: false,
             opened: true,
             views: 0

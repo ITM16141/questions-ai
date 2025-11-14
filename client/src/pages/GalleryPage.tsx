@@ -1,14 +1,13 @@
 import "./App.css";
 import React, { useEffect, useState } from "react";
 import { fetchGallery } from "../api";
-import MarkdownRenderer from "../components/MarkdownRenderer";
 import Tabs from "../components/Tabs";
 import {HistoryEntry} from "../types";
 import {useNavigate} from "react-router-dom";
 
 function GalleryPage(){
     const [entries, setEntries] = useState<HistoryEntry[]>([]);
-    const [searchTag, setSearchTag] = useState("");
+    const [searchTopic, setSearchTopic] = useState("");
     const [inputId, setInputId] = useState("");
     const navigate = useNavigate();
 
@@ -16,9 +15,9 @@ function GalleryPage(){
         fetchGallery().then(setEntries);
     }, []);
 
-    const filtered = searchTag.trim()
+    const filtered = searchTopic.trim()
         ? entries.filter(entry =>
-            entry.tags.some(tag => tag.toLowerCase().includes(searchTag.toLowerCase()))
+            entry.topics.some(topic => topic.toLowerCase().includes(searchTopic.toLowerCase()))
         )
         : entries;
 
@@ -41,12 +40,12 @@ function GalleryPage(){
                 />
                 <button type="submit">表示</button>
             </form>
-            <h2>タグから検索</h2>
+            <h2>出題範囲から検索</h2>
             <input
                 type="text"
-                placeholder="タグで検索"
-                value={searchTag}
-                onChange={e => setSearchTag(e.target.value)}
+                placeholder="出題範囲で検索"
+                value={searchTopic}
+                onChange={e => setSearchTopic(e.target.value)}
             />
 
             {filtered.map((entry, idx) => (
@@ -55,19 +54,14 @@ function GalleryPage(){
                     <div><strong>出題範囲：</strong>{entry.topics.join(", ")}</div>
                     <div><strong>日時：</strong>{new Date(entry.created_at).toLocaleString()}</div>
                     <div><strong>閲覧数：</strong>{entry.views}</div>
-                    <div><strong>タグ：</strong>{entry.tags.join(", ")}</div>
-                    <details>
-                        <summary>📘 問題を見る</summary>
-                        <div className="problem-block">
-                            <pre><MarkdownRenderer content={entry.problem} /></pre>
-                        </div>
-                    </details>
-                    <details>
-                        <summary>🧠 解答を見る</summary>
-                        <div className="solution-block">
-                            <pre><MarkdownRenderer content={entry.solution} /></pre>
-                        </div>
-                        </details>
+                    <form
+                        onSubmit={e => {
+                            e.preventDefault();
+                            navigate(`/share/${entry.id}`);
+                        }}
+                    >
+                        <button type="submit">閲覧</button>
+                    </form>
                 </div>
             ))}
         </div>

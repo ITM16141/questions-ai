@@ -1,36 +1,18 @@
 import "./App.css";
 import React, { useEffect, useState } from "react";
-import {fetchHistory, updateTags, updatePinned, updateOpened} from "../api";
+import {fetchHistory, updatePinned, updateOpened} from "../api";
 import Tabs from "../components/Tabs";
 import {HistoryEntry} from "../types";
 import MarkdownRenderer from "../components/MarkdownRenderer";
 
 function HistoryPage(){
     const [history, setHistory] = useState<HistoryEntry[]>([]);
-    const [tagInputs, setTagInputs] = useState<Record<number, string>>({});
-    const [searchTag, setSearchTag] = useState("");
+    const [searchTopic, setSearchTopic] = useState("");
     const userId = localStorage.getItem("userId") as string;
 
     useEffect(() => {
         fetchHistory(userId).then(setHistory);
     }, []);
-
-    const handleAddTag = async (id: string, index: number) => {
-        const newTag = tagInputs[index]?.trim();
-        if (!newTag) return;
-        const updatedTags = [...history[index].tags, newTag];
-        await updateTags(id, updatedTags);
-        const updated = await fetchHistory(userId);
-        setHistory(updated);
-        setTagInputs({ ...tagInputs, [index]: "" });
-    };
-
-    const handleRemoveTag = async (id: string, index: number, tagToRemove: string) => {
-        const updatedTags = history[index].tags.filter(tag => tag !== tagToRemove);
-        await updateTags(id, updatedTags);
-        const updated = await fetchHistory(userId);
-        setHistory(updated);
-    };
 
     const handleTogglePin = async (id: string, current: boolean) => {
         await updatePinned(id, !current);
@@ -44,9 +26,9 @@ function HistoryPage(){
         setHistory(updated);
     };
 
-    const filteredHistory = searchTag.trim()
+    const filteredHistory = searchTopic.trim()
         ? history.filter(entry =>
-            entry.tags.some(tag => tag.toLowerCase().includes(searchTag.toLowerCase()))
+            entry.topics.some(topic => topic.toLowerCase().includes(searchTopic.toLowerCase()))
         )
         : history;
 
@@ -62,10 +44,10 @@ function HistoryPage(){
             <h1>📚 履歴</h1>
             <input
                 type="text"
-                placeholder="タグで検索（例：微分）"
-                value={searchTag}
-                onChange={e => setSearchTag(e.target.value)}
-                className="tag-search"
+                placeholder="出題範囲で検索（例：微分）"
+                value={searchTopic}
+                onChange={e => setSearchTopic(e.target.value)}
+                className="topic-search"
             />
 
             {sortedHistory.map((entry, idx) => (
@@ -74,7 +56,6 @@ function HistoryPage(){
                     <div><strong>出題範囲：</strong>{entry.topics.join(", ")}</div>
                     <div><strong>日時：</strong>{new Date(entry.created_at).toLocaleString()}</div>
                     <div><strong>閲覧数：</strong>{entry.views}</div>
-                    <div><strong>タグ：</strong>{entry.tags.join(", ")}</div>
 
                     <button onClick={() => handleToggleOpened(entry.id, entry.opened)}>
                         {entry.opened ? "🌐 公開解除" : "🌐 公開する"}
@@ -92,28 +73,6 @@ function HistoryPage(){
                     <button onClick={() => handleTogglePin(entry.id, entry.pinned)}>
                         {entry.pinned ? "📌 固定解除" : "📌 ピン留め"}
                     </button>
-
-                    {entry.tags.length > 0 && (
-                        <div className="tags">
-                            <strong>タグ：</strong>
-                            {entry.tags.map((tag, i) => (
-                                <span key={i} className="tag">
-                                    {tag}
-                                    <button onClick={() => handleRemoveTag(entry.id, idx, tag)}>❌</button>
-                                </span>
-                            ))}
-                        </div>
-                    )}
-
-                    <div className="tag-editor">
-                        <input
-                            type="text"
-                            value={tagInputs[idx] || ""}
-                            onChange={e => setTagInputs({ ...tagInputs, [idx]: e.target.value })}
-                            placeholder="タグを追加"
-                        />
-                        <button onClick={() => handleAddTag(entry.id, idx)}>追加</button>
-                    </div>
 
                     <details>
                         <summary>📘 問題を見る</summary>
